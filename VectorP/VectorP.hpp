@@ -1,5 +1,6 @@
 // File: VectorP/VectorP.hpp
 
+
 #ifndef VECTORP_HPP_
 #define VECTORP_HPP_
 
@@ -89,7 +90,7 @@ void VectorP<P>::append(P const &e) {
 // ========= doubleCapacity =========
 template<class P>
 void VectorP<P>::doubleCapacity() {
-    int i;
+    int i;   
     P *newDat = new P[2 * _cap];
     for (i = 0; i < _size; i++) {
         newDat[i] = _data[i];
@@ -97,7 +98,7 @@ void VectorP<P>::doubleCapacity() {
     for (i = 0; i < _cap; i++) {
         _data[i] = nullptr;
     }
-    delete[] _data;
+    delete [] _data;
     _data = newDat;
     _cap *= 2;
 }
@@ -105,8 +106,19 @@ void VectorP<P>::doubleCapacity() {
 // ========= insert =========
 template<class P>
 void VectorP<P>::insert(int i, P const &e) {
-    cerr << "VectorP<P>::insert: Exercise for the student." << endl;
-    throw -1;
+    if (i < 0 || _size < i) {
+        cerr << "VectorP insert precondition 0 <= i && i <= size() violated.\n"
+                << "i == " << i << endl;
+        throw -1;
+    }
+    if (_size == _cap) {
+        doubleCapacity();
+    }
+    for (int j = _size - 1; j >= i; j--) {
+        _data[j + 1] = _data[j];
+    }
+    _data[i] = e;
+    _size++;
 }
 
 // ========= operator[] =========
@@ -138,8 +150,20 @@ ostream &operator<<(ostream &os, VectorP<P> const &rhs) {
 // ========= remove =========
 template<class P>
 P VectorP<P>::remove(int i) {
-    cerr << "VectorP<P>::remove: Exercise for the student." << endl;
-    throw -1;
+    if (i < 0 || _size <= i) {
+        cerr << "VectorP remove precondition 0 <= i && i < size() violated.\n"
+                << "i == " << i << endl;
+        throw -1;
+    }
+    P removed = * new P;
+    removed = _data[i];
+        for (int j = i; j < _size - 1; j++) {
+            _data[j] = _data[j + 1];           
+        }
+        //delete  _data[_size-1];
+        _data[_size-1] = nullptr;
+        _size--; 
+        return removed;
 }
 
 // ========= toStream =========

@@ -1,5 +1,6 @@
 // File: VectorP/VectorPMain.cpp
 
+
 #include <cstdlib> // EXIT_SUCCESS.
 #include <iostream> // cout.
 #include <fstream> // ifstream.
@@ -46,6 +47,7 @@ int main() {
             pValue = v.remove(index);
             cout << "\n" << *pValue << " removed." << endl;
             delete pValue;
+            pValue = nullptr;
             break;
         case 'T':
             cout << "Set what integer value? ";
