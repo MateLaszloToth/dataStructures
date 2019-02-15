@@ -1,6 +1,8 @@
 // File: VectorT/VectorT.hpp
 
-
+// Name: Mate Toth
+// Date: 09/7
+// Assignment: 3
 
 #ifndef VECTORT_HPP_
 #define VECTORT_HPP_
