@@ -1,5 +1,6 @@
 // File: ListL/ListL.hpp
 
+
 #ifndef LISTL_HPP_
 #define LISTL_HPP_
 
@@ -19,10 +20,10 @@ private:
     // Copy constructor disabled.
 
 public:
-    ListL();  // Constructor
+    ListL(); // Constructor
     // Post: This list is initialized to be empty.
 
-    ~ListL();  // Destructor
+    ~ListL(); // Destructor
     // Post: This list is deallocated.
 
     void append(T const &data);
@@ -126,26 +127,42 @@ private:
     ListL<T> const *_listL;
     LNode<T> *_current;
 public:
-    void setIterListL(ListL<T> const *listL) { _listL = listL; }
+
+    void setIterListL(ListL<T> const *listL) {
+        _listL = listL;
+    }
 
     // Post: Positions the iterator to the first element.
-    void first() { _current = _listL->_head; }
+
+    void first() {
+        _current = _listL->_head;
+    }
 
     // Post: Advances the current element.
-    void next() { _current = _current->_next; }
+
+    void next() {
+        _current = _current->_next;
+    }
 
     // Post: Checks whether there is a next element.
-    bool hasNext() const { return _current->_next != nullptr; }
+
+    bool hasNext() const {
+        return _current->_next != nullptr;
+    }
 
     // Post: Checks whether at end of the list.
-    bool isDone() const { return _current == nullptr; }
+
+    bool isDone() const {
+        return _current == nullptr;
+    }
 
     // Pre: The current element exists.
     // Post: The current element of this list is returned.
+
     T const &currentItem() const {
         if (_current == nullptr) {
             cerr << "currentItem precondition violated: "
-                 << "Current element does not exist." << endl;
+                    << "Current element does not exist." << endl;
             throw -1;
         }
         return _current->_data;
@@ -153,31 +170,42 @@ public:
 };
 
 // ========= Constructors =========
+
 template<class T>
-ListL<T>::ListL():
-    _head(nullptr) {
+ListL<T>::ListL() :
+_head(nullptr) {
 }
 
 template<class T>
-LNode<T>::LNode(T data):
-    _data(data),
-    _next(nullptr) {
-    }
+LNode<T>::LNode(T data) :
+_data(data),
+_next(nullptr) {
+}
 
 // ========= Destructor =========
+
 template<class T>
 ListL<T>::~ListL() {
     clear();
 }
 
 // ========= append =========
+
 template<class T>
 void ListL<T>::append(T const &data) {
-    cerr << "ListL<T>::append: Exercise for the student." << endl;
-    throw -1;
+    if (isEmpty()) {
+        _head = new LNode<T>(data);
+    } else {
+        LNode<T> *p = _head;
+        while (p->_next != nullptr) {
+            p = p->_next;
+        }
+        p->_next = new LNode<T>(data);
+    }
 }
 
 // ========= clear =========
+
 template<class T>
 void ListL<T>::clear() {
     LNode<T> *p;
@@ -190,6 +218,7 @@ void ListL<T>::clear() {
 }
 
 // ========= concat =========
+
 template<class T>
 void ListL<T>::concat(ListL<T> &suffix) {
     cerr << "ListL<T>::concat: Exercise for the student." << endl;
@@ -197,79 +226,118 @@ void ListL<T>::concat(ListL<T> &suffix) {
 }
 
 // ========= contains =========
+
 template<class T>
 bool ListL<T>::contains(T const &data) const {
-    cerr << "ListL<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    for (LNode<T> *p = _head; p != nullptr; p = p->_next) {
+        if (data == p->_data) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // ========= copyHead =========
+
 template<class T>
 LNode<T> *ListL<T>::copyHead(ListL<T> const &rhs) {
     if (rhs.isEmpty()) {
         return nullptr;
-    }
-    else {
+    } else {
         LNode<T> *p, *q, *result;
-        cerr << "ListL<T>::copyHead: Exercise for the student." << endl;
-        // Three lines to set up the loop invariant,
-        // followed by a single while with only three lines in the body.
-        // No additional local variables.
-        throw -1;
+        result = new LNode<T>(rhs._head->_data);
+        q = result;
+        p = rhs._head->_next;
+        while (p != nullptr) {
+            q->_next = new LNode<T>(p->_data);
+            q = q->_next;
+            p = p->_next;
+        }
+        return result;
     }
 }
 
 // ========= equals =========
+
 template<class T>
 bool ListL<T>::equals(ListL<T> const &rhs) const {
-    cerr << "ListL<T>::equals: Exercise for the student." << endl;
-    // Two initialization statements,
-    // followed by a single while with three tests and two statements in the body,
-    // followed by a single return.
-    throw -1;
+
+    LNode<T> *p = _head;
+    LNode<T> *q = rhs._head;
+    while (p != nullptr && q != nullptr && p->_data == q->_data) {
+        p = p->_next;
+        q = q->_next;
+    }
+    if (p == nullptr && q == nullptr) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // ========= first =========
+
 template<class T>
 T const &ListL<T>::first() const {
-    cerr << "ListL<T>::first: Exercise for the student." << endl;
-    // Don't forget the precondition.
-    throw -1;
+    if (isEmpty()) {
+        cerr << "ListL<T>::first: The list is empty." << endl;
+        throw -1;
+    } else {
+        return _head->_data;
+    }
 }
 
 // ========= isEmpty =========
+
 template<class T>
 bool ListL<T>::isEmpty() const {
     return _head == nullptr;
 }
 
 // ========= length =========
+
 template<class T>
 int ListL<T>::length() const {
-    cerr << "ListL<T>::length: Exercise for the student." << endl;
-    throw -1;
+    int count = 0;
+    for (LNode<T> *p = _head; p != nullptr; p = p->_next) {
+        count++;
+    }
+    return count;
 }
 
 // ========= length2 =========
+
 template<class T>
 int ListL<T>::length2() const {
-    cerr << "ListL<T>::length2: Exercise for the student." << endl;
-    throw -1;
+    ListLIterator<T> iter;
+    iter.setIterListL(this);
+    int count = 0;
+    for(iter.first(); !iter.isDone(); iter.next()) {
+        count++;
+    }
+    return count;
 }
 
 // ========= max =========
+
 template<class T>
 T const &ListL<T>::max() const {
-    if (_head == nullptr) {
-        cerr << "max precondition violated: An empty list has no maximum." << endl;
-        throw -1;
-    }
-    T const *result = &_head->_data;
-    cerr << "ListL<T>::max: Exercise for the student." << endl;
+    //    if (isEmpty()) {
+    //        cerr << "max precondition violated: An empty list has no maximum." << endl;
+    //        throw -1;
+    //    }
+    //    T const *result = &_head->_data;
+    //    T max = *result;
+    //    for (LNode<T> *p = _head->_next; p != nullptr; p = p->_next) {
+    //        max = (max > &p->_data) ? max: &p->_data;
+    //    }
+    //    return max;
+    cerr << "ListL<T>::max3: Exercise for the student." << endl;
     throw -1;
 }
 
 // ========= max3 =========
+
 template<class T>
 T const &ListL<T>::max3() const {
     cerr << "ListL<T>::max3: Exercise for the student." << endl;
@@ -277,6 +345,7 @@ T const &ListL<T>::max3() const {
 }
 
 // ========= operator= =========
+
 template<class T>
 ListL<T> &ListL<T>::operator=(ListL<T> const &rhs) {
     if (this != &rhs) { // In case someone writes myList = myList;
@@ -287,12 +356,14 @@ ListL<T> &ListL<T>::operator=(ListL<T> const &rhs) {
 }
 
 // ========= operator== =========
+
 template<class T>
 bool operator==(ListL<T> const &lhs, ListL<T> const &rhs) {
     return lhs.equals(rhs);
 }
 
 // ========= operator<< =========
+
 template<class T>
 ostream &operator<<(ostream &os, ListL<T> const &rhs) {
     rhs.toStream(os);
@@ -300,6 +371,7 @@ ostream &operator<<(ostream &os, ListL<T> const &rhs) {
 }
 
 // ========= prepend =========
+
 template<class T>
 void ListL<T>::prepend(T const &data) {
     LNode<T> *temp = _head;
@@ -308,44 +380,88 @@ void ListL<T>::prepend(T const &data) {
 }
 
 // ========= remFirst =========
+
 template<class T>
 T ListL<T>::remFirst() {
-    cerr << "ListL<T>::remFirst: Exercise for the student." << endl;
-    // Don't forget the precondition.
-    throw -1;
+    if (isEmpty()) {
+        cerr << "ListL<T>::remFirst: The list is empty." << endl;
+        throw -1;
+    } else {
+        LNode<T> *p = _head;
+        _head = _head->_next;
+        p->_next = nullptr;
+        T temp = p->_data;
+        delete p;
+        return temp;
+    }
 }
 
 // ========= remLast =========
+
 template<class T>
 T ListL<T>::remLast() {
-    cerr << "ListL<T>::remLast: Exercise for the student." << endl;
-    // Don't forget the precondition.
-    throw -1;
+    if (isEmpty()) {
+        cerr << "ListL<T>::remLast: This is an empty list" << endl;
+        throw -1;
+    }
+    LNode<T> *p, *q;
+    p = _head;
+    q = _head;
+    while (p->_next != nullptr) {
+        q = p;
+        p = p->_next;
+    }
+
+    T temp = p->_data;
+    if (p == _head) {
+        delete p;
+        _head = nullptr;
+    } else {
+        q->_next = nullptr;
+        delete p;
+    }
+    return temp;
 }
 
 // ========= remove =========
+
 template<class T>
 void ListL<T>::remove(T const &data) {
-    cerr << "ListL<T>::remove: Exercise for the student." << endl;
-    throw -1;
+    LNode<T> *p = _head;
+    LNode<T> *q = nullptr; // q follows p  
+    while ((p != nullptr) && (p->_data != data)) {
+        q = p;
+        p = p->_next;
+    }
+    if (p != nullptr) {
+        if (q == nullptr) {
+            _head = p->_next;
+        } else {
+            q->_next = p->_next;
+        }
+        delete p;
+    }
 }
 
 // ========= reverse =========
+
 template<class T>
 void ListL<T>::reverse() {
     LNode<T> *pReverse, *pRest, *temp;
     pReverse = nullptr;
     pRest = _head;
-    cerr << "ListL<T>::reverse: Exercise for the student." << endl;
-    // Invariants:
-    // pReverse ponts to the reverse of the first part of the list,
-    // pRest points to the rest of the unmodified list.
-    // A single while with four statements in the body,
-    // followed by a single assignment to _head
-    throw -1;
+
+    while (pRest != nullptr) {
+        temp = pRest->_next;
+        pRest->_next = pReverse;
+        pReverse = pRest;
+        pRest = temp;
+    }
+    _head = pReverse;
 }
 
 // ========= setFirst =========
+
 template<class T>
 void ListL<T>::setFirst(T const &data) {
     if (_head == nullptr) {
@@ -356,14 +472,14 @@ void ListL<T>::setFirst(T const &data) {
 }
 
 // ========= toStream =========
+
 template<class T>
 void ListL<T>::toStream(ostream &os) const {
     os << "(";
-    for (LNode<T> *p = _head; p!= nullptr; p = p->_next) {
+    for (LNode<T> *p = _head; p != nullptr; p = p->_next) {
         if (p->_next != nullptr) {
             os << p->_data << ", ";
-        }
-        else {
+        } else {
             os << p->_data;
         }
     }
@@ -371,6 +487,7 @@ void ListL<T>::toStream(ostream &os) const {
 }
 
 // ========= toStream4 =========
+
 template<class T>
 void ListL<T>::toStream4(ostream &os) const {
     ListLIterator<T> iter;
@@ -379,8 +496,7 @@ void ListL<T>::toStream4(ostream &os) const {
     for (iter.first(); !iter.isDone(); iter.next()) {
         if (iter.hasNext()) {
             os << iter.currentItem() << ", ";
-        }
-        else {
+        } else {
             os << iter.currentItem();
         }
     }
@@ -388,6 +504,7 @@ void ListL<T>::toStream4(ostream &os) const {
 }
 
 // ========= unZip =========
+
 template<class T>
 ListL<T> *ListL<T>::unZip() {
     cerr << "ListL<T>::unZip: Exercise for the student." << endl;
@@ -395,6 +512,7 @@ ListL<T> *ListL<T>::unZip() {
 }
 
 // ========= zip =========
+
 template<class T>
 void ListL<T>::zip(ListL<T> &other) {
     cerr << "ListL<T>::zip: Exercise for the student." << endl;
