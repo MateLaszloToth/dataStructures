@@ -8,12 +8,9 @@
 #include "LCSVtoStreamVis.hpp"
 #include "LCSVisEmptyVis.hpp"
 #include "LCSVclearVis.hpp"
-#include "LCSVconcatVis.hpp"
 #include "LCSVappendVis.hpp"
 #include "LCSVremLastVis.hpp"
 #include "LCSVremoveVis.hpp"
-#include "LCSVzipVis.hpp"
-#include "LCSVunZipVis.hpp"
 #include "LCSVreverseVis.hpp"
 #include "LCSVlengthVis.hpp"
 #include "LCSVmaxVis.hpp"
@@ -35,9 +32,9 @@ int main() {
     char response;
     do {
         cout << "\nThere are [0.." << NUM_LISTS - 1 << "] mutable lists." << endl;
-        cout << "(f)irst        s(e)tFirst  (p)repend     removeF(i)rst  cl(o)ne  (c)lear\n"
-             << "conca(t)enate  (a)ppend    removeLa(s)t  remove(V)alue  (z)ip    (u)nzip\n"
-             << "(r)everse      len(g)th    (m)ax         co(n)tains     equa(l)  (w)rite\n"
+        cout << "(f)irst        s(e)tFirst  (p)repend     removeF(i)rst    cl(o)ne\n"
+             << "(a)ppend       len(g)th    (m)ax         removeLa(s)t     equa(l)\n"
+             << "co(n)tains     (w)rite     (c)lear       remove(V)alue    (r)everse\n"
              << "(q)uit: ";
         cin >> response;
         switch (toupper(response)) {
@@ -81,15 +78,6 @@ int main() {
             listNum = promptIntBetween("Clear which list? ", 0, NUM_LISTS - 1);
             clear(*lists[listNum]);
             break;
-        case 'T':
-            listNum = promptIntBetween("Concatenate which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Suffix list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "\nThe lists must be distinct." << endl;
-            } else {
-                concat(*lists[listNum], *lists[listNum2]);
-            }
-            break;
         case 'A':
             cout << "Append what integer value? ";
             cin >> value;
@@ -109,25 +97,6 @@ int main() {
             cin >> value;
             listNum = promptIntBetween("Remove from which list? ", 0, NUM_LISTS - 1);
             remove(*lists[listNum], value);
-            break;
-        case 'Z':
-            listNum = promptIntBetween("Zip which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Combine with which list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "The lists must be distinct." << endl;
-            } else {
-                zip(*lists[listNum], *lists[listNum2]);
-            }
-            break;
-        case 'U':
-            listNum = promptIntBetween("Unzip which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Split off to which list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "The lists must be distinct." << endl;
-            } else {
-                delete lists[listNum2];
-                lists[listNum2] = unZip(*lists[listNum]);
-            }
             break;
         case 'R':
             listNum = promptIntBetween("Reverse which list? ", 0, NUM_LISTS - 1);

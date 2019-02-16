@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVappendVis.hpp
 
+
 #ifndef LCSVAPPENDVIS_HPP_
 #define LCSVAPPENDVIS_HPP_
 
@@ -25,13 +26,11 @@ public:
     // Post: data is appended to this list.
 
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVappendVis: Exercise for the student." << endl;
-        throw -1;
+        host.prepend(_data);
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVappendVis: Exercise for the student." << endl;
-        throw -1;
+        host.rest().accept(*this);
     }
 
     // ========= visit const =========
@@ -52,8 +51,8 @@ public:
 // Post: data is appended to list.
 template<class T>
 void append(ListCSV<T> &list, T const &data) {
-    cerr << "append: Exercise for the student." << endl;
-    throw -1;
+    LCSVappendVis<T> appendVis(data);
+    list.accept(appendVis);
 }
 
 #endif

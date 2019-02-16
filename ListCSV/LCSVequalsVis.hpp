@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVequalsVis.hpp
 
+
 #ifndef LCSVEQUALSVIS_HPP_
 #define LCSVEQUALSVIS_HPP_
 
@@ -26,24 +27,24 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        _result = isEmpty(_rhs);
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        LCSVequalsHelperVis<T> equalsHelperVis(host.first(), host.rest());
+            _rhs.accept(equalsHelperVis);
+            _result = equalsHelperVis.result();
     }
 
     // ========= visit const =========
     void emptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+         _result = isEmpty(_rhs);
     }
 
     void nonEmptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+            LCSVequalsHelperVis<T> equalsHelperVis(host.first(), host.rest());
+            _rhs.accept(equalsHelperVis);
+            _result = equalsHelperVis.result();
     }
 
     // ========= result =========
@@ -51,8 +52,7 @@ public:
     // Post: true is returned if the host list is equal to rhs; otherwise, false is returned.
     // Two lists are equal if they contain the same number of equal elements in the same order.
     bool result() const {
-        cerr << "LCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -73,24 +73,32 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        if(host.first() == _first){
+            LCSVequalsVis<T> equalsVis(host.rest());
+            _rest.accept(equalsVis);
+            _result = equalsVis.result();
+        }else{
+            _result = false;
+        }
     }
 
     // ========= visit const =========
     void emptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        if(host.first() == _first){
+            LCSVequalsVis<T> equalsVis(host.rest());
+            _rest.accept(equalsVis);
+            _result = equalsVis.result();
+        }else{
+            _result = false;
+        }
     }
 
     // ========= result =========
@@ -98,8 +106,7 @@ public:
     // Post: true is returned if first equals host.first() and rest equals host.rest();
     // otherwise, false is returned.
     bool result() const {
-        cerr << "LCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -107,8 +114,9 @@ public:
 // ========= operator== =========
 template<class T>
 bool operator==(ListCSV<T> const &lhs, ListCSV<T> const &rhs) {
-    cerr << "operator==: Exercise for the student." << endl;
-    throw -1;
+    LCSVequalsVis<T> equalsVis(rhs);
+    lhs.accept(equalsVis);
+    return equalsVis.result();
 }
 
 #endif

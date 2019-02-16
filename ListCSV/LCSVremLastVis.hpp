@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVremLastVis.hpp
 
+
 #ifndef LCSVREMLASTVIS_HPP_
 #define LCSVREMLASTVIS_HPP_
 
@@ -23,13 +24,14 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremLastVis: Exercise for the student." << endl;
+        cerr << "LCSVremLastVis: The list is empty" << endl;
         throw -1;
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremLastVis: Exercise for the student." << endl;
-        throw -1;
+        LCSVremLastHelperVis<T> remLastHelperVis(host);
+        host.rest().accept(remLastHelperVis);
+        _result = remLastHelperVis.result();
     }
 
     // ========= visit const =========
@@ -50,8 +52,7 @@ public:
     // Pre: This list is not empty.
     // Post: The last element is removed from this list and returned.
     T result() const {
-        cerr << "LCSVremLastVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -70,13 +71,13 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremLastHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = _previous.remFirst();
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremLastHelperVis: Exercise for the student." << endl;
-        throw -1;
+        LCSVremLastHelperVis<T> remLastHelperVis(host);
+        host.rest().accept(remLastHelperVis);
+        _result = remLastHelperVis.result();
     }
 
     // ========= visit const =========
@@ -97,16 +98,16 @@ public:
     // Pre: previous.rest() is the host list.
     // Post: The last element of previous is removed and returned.
     T const &result() const {
-        cerr << "LCSVremLastHelperVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
 // Global function for convenience.
 template<class T>
 T remLast(ListCSV<T> &list) {
-    cerr << "remLast: Exercise for the student." << endl;
-    throw -1;
+    LCSVremLastVis<T> remLastVis;
+    list.accept(remLastVis);
+    return remLastVis.result();
 }
 
 #endif

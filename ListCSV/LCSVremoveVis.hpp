@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVremoveVis.hpp
 
+
 #ifndef LCSVREMOVEVIS_HPP_
 #define LCSVREMOVEVIS_HPP_
 
@@ -25,13 +26,15 @@ public:
     // Post: If data is in the host list, it is removed;
     // otherwise the host list is unchanged.
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremoveVis: Exercise for the student." << endl;
-        throw -1;
+        
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVremoveVis: Exercise for the student." << endl;
-        throw -1;
+        if(host.first() == _data){
+            host.remFirst();
+        }else{
+            host.rest().accept(*this);
+        }
     }
 
     // ========= visit const =========
@@ -51,8 +54,8 @@ public:
 // Global function for convenience.
 template<class T>
 void remove(ListCSV<T> &list, T const &data) {
-    cerr << "remove: Exercise for the student." << endl;
-    throw -1;
+    LCSVremoveVis<T> removeVis(data);
+    list.accept(removeVis);
 }
 
 #endif

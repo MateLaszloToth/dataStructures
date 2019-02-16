@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVreverseVis.hpp
 
+
 #ifndef LCSVREVERSEVIS_HPP_
 #define LCSVREVERSEVIS_HPP_
 
@@ -23,13 +24,15 @@ public:
     // Pre: This visitor has been accepted by a host list.
     // Post: The host list is reversed.
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVreverseVis: Exercise for the student." << endl;
-        throw -1;
+        
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVreverseVis: Exercise for the student." << endl;
-        throw -1;
+        ListCSV<T> revList;
+        LCSVreverseHelperVis<T> reverseHelperVis(revList);
+        host.accept(reverseHelperVis); 
+        host.setList(revList);
+        
     }
 
     // ========= visit const =========
@@ -63,13 +66,12 @@ public:
     // Post: The host list is prepended to revList in reverse order,
     // and the host list is empty.
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVreverseHelperVis: Exercise for the student." << endl;
-        throw -1;
+        //host.setList(_revList);
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVreverseHelperVis: Exercise for the student." << endl;
-        throw -1;
+         _revList.prepend(host.remFirst());
+        host.accept(*this); 
     }
 
     // ========= visit const =========
@@ -89,8 +91,8 @@ public:
 // Global function for convenience.
 template<class T>
 void reverse(ListCSV<T> &list) {
-    cerr << "reverse: Exercise for the student." << endl;
-    throw -1;
+    LCSVreverseVis<T> reverseVis;
+    list.accept(reverseVis);
 }
 
 #endif

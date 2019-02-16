@@ -261,40 +261,36 @@ AcsvNode<T> *NEcsvNode<T>::copyHead() {
 
 template<class T>
 T &ListCSV<T>::first() {
-    cerr << "ListCSV<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _head->first();
 }
 
 template<class T>
 T &MTcsvNode<T>::first() {
-    cerr << "MTcsvNode<T>::first: Exercise for the student." << endl;
+    cerr << "MTcsvNode<T>::first: There is no element in an empty list" << endl;
     throw -1;
 }
 
 template<class T>
 T &NEcsvNode<T>::first() {
-    cerr << "NEcsvNode<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= first const =========
 
 template<class T>
 T const &ListCSV<T>::first() const {
-    cerr << "ListCSV<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _head->first();
 }
 
 template<class T>
 T const &MTcsvNode<T>::first() const {
-    cerr << "MTcsvNode<T>::first: Exercise for the student." << endl;
+    cerr << "MTcsvNode<T>::first: There is no element in a constant empty list" << endl;
     throw -1;
 }
 
 template<class T>
 T const &NEcsvNode<T>::first() const {
-    cerr << "NEcsvNode<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= prepend =========
@@ -320,20 +316,22 @@ void NEcsvNode<T>::prepend(ListCSV<T> &owner, T const &data) {
 
 template < class T >
 T ListCSV<T>::remFirst() {
-    cerr << "ListCSV<T>::remFirst: Exercise for the student." << endl;
-    throw -1;
+    return _head->remFirst(*this);
 }
 
 template<class T>
 T MTcsvNode<T>::remFirst(ListCSV<T> &owner) {
-    cerr << "MTcsvNode<T>::remFirst: Exercise for the student." << endl;
+    cerr << "MTcsvNode<T>::remFirst: The list is empty" << endl;
     throw -1;
 }
 
 template<class T>
 T NEcsvNode<T>::remFirst(ListCSV<T> &owner) {
-    cerr << "NEcsvNode<T>::remFirst: Exercise for the student." << endl;
-    throw -1;
+    T temp = _data;
+    owner._head = _rest._head;
+    _rest._head = nullptr;
+    delete this;
+    return temp;
 }
 
 // ========= rest =========

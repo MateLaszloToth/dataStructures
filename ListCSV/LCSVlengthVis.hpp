@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVlengthVis.hpp
 
+
 #ifndef LCSVLENGTHVIS_HPP_
 #define LCSVLENGTHVIS_HPP_
 
@@ -22,40 +23,39 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVlengthVis: Exercise for the student." << endl;
-        throw -1;
+        
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVlengthVis: Exercise for the student." << endl;
-        throw -1;
+        _result++;
+        host.rest().accept(*this);
+        
     }
 
     // ========= visit const =========
     void emptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVlengthVis: Exercise for the student." << endl;
-        throw -1;
+    
     }
 
     void nonEmptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVlengthVis: Exercise for the student." << endl;
-        throw -1;
+        _result++;
+        host.rest().accept(*this);
     }
 
     // ========= result =========
     // Pre: This visitor has been accepted by a host list.
     // Post: The length of the host list is returned.
     int result() const {
-        cerr << "LCSVlengthVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
 // Global function for convenience.
 template<class T>
 int length(ListCSV<T> const &list) {
-    cerr << "length: Exercise for the student." << endl;
-    throw -1;
+    LCSVlengthVis<T> lengthVis;
+    list.accept(lengthVis);
+    return lengthVis.result();
 }
 
 #endif

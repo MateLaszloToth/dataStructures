@@ -1,5 +1,6 @@
 // File: ListCSV/LCSVcontainsVis.hpp
 
+
 #ifndef LCSVCONTAINSVIS_HPP_
 #define LCSVCONTAINSVIS_HPP_
 
@@ -23,24 +24,28 @@ public:
 
     // ========= visit =========
     void emptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(ListCSV<T> &host) override {
-        cerr << "LCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        if(host.first() == _data){
+            _result = true;
+        }else{
+            host.rest().accept(*this);
+        }
     }
 
     // ========= visit const =========
     void emptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(ListCSV<T> const &host) override {
-        cerr << "LCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        if(host.first() == _data){
+            _result = true;
+        }else{
+            host.rest().accept(*this);
+        }
     }
 
     // ========= result =========
@@ -48,8 +53,7 @@ public:
     // Post: true is returned if data is contained in the host list;
     // Otherwise, false is returned.
     bool result() const {
-        cerr << "LCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -58,8 +62,9 @@ public:
 // Otherwise, false is returned.
 template<class T>
 bool contains(ListCSV<T> const &list, T const &data) {
-    cerr << "append: Exercise for the student." << endl;
-    throw -1;
+    LCSVcontainsVis<T> containsVis(data);
+    list.accept(containsVis);
+    return containsVis.result();
 }
 
 #endif
