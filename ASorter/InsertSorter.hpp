@@ -1,5 +1,6 @@
 // File ASorter/InsertSorter.hpp
 
+
 #ifndef INSERTSORTER_HPP_
 #define INSERTSORTER_HPP_
 
@@ -27,8 +28,11 @@ template<class T>
 void InsertSorter<T>::join(ASeq<T> &a, int lo, int mid, int hi) {
     // Pre: mid == hi && sorted(a[lo..hi - 1]).
     // Post: sorted(a[lo..hi]).
-    cerr << "InsertSorter<T>::join: Exercise for the student." << endl;
-    throw -1;
+    T key = a[mid];
+    for (int i = mid; i > lo && key < a[i - 1]; i--, mid--) {
+        a[i] = a[i - 1];
+    }
+    a[mid] = key;
 }
 
 #endif
