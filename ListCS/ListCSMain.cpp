@@ -22,9 +22,9 @@ int main() {
     do {
         cout << "\nThere are [0.." << NUM_LISTS - 1 << "] mutable lists." << endl;
         cout
-            << "(f)irst        s(e)tFirst  (p)repend     removeF(i)rst  cl(o)ne  (c)lear\n"
-            << "conca(t)enate  (a)ppend    removeLa(s)t  remove(V)alue  (z)ip    (u)nzip\n"
-            << "(r)everse      len(g)th    (m)ax         co(n)tains     equa(l)  (w)rite\n"
+            << "(f)irst        s(e)tFirst   (p)repend      removeF(i)rst   (c)lear\n"
+            << "(a)ppend       removeLa(s)t remove(V)alue  co(n)tains      cl(o)ne\n"
+            << "(r)everse      len(g)th     (m)ax          equa(l)         (w)rite\n"
             << "(q)uit: ";
         cin >> response;
         switch (toupper(response)) {
@@ -67,15 +67,6 @@ int main() {
         case 'C':
             lists[promptIntBetween("Clear which list? ", 0, NUM_LISTS - 1)]->clear();
             break;
-        case 'T':
-            listNum = promptIntBetween("Concatenate which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Suffix list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "\nThe lists must be distinct." << endl;
-            } else {
-                lists[listNum]->concat(*lists[listNum2]);
-            }
-            break;
         case 'A':
             cout << "Append what integer value? ";
             cin >> value;
@@ -93,25 +84,6 @@ int main() {
             cout << "Remove what integer value? ";
             cin >> value;
             lists[promptIntBetween("Remove from which list? ", 0, NUM_LISTS - 1)]->remove(value);
-            break;
-        case 'Z':
-            listNum = promptIntBetween("Zip which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Combine with which list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "The lists must be distinct." << endl;
-            } else {
-                lists[listNum]->zip(*lists[listNum2]);
-            }
-            break;
-        case 'U':
-            listNum = promptIntBetween("Unzip which list? ", 0, NUM_LISTS - 1);
-            listNum2 = promptIntBetween("Split off to which list? ", 0, NUM_LISTS - 1);
-            if (listNum == listNum2) {
-                cout << "The lists must be distinct." << endl;
-            } else {
-                delete lists[listNum2];
-                lists[listNum2] = lists[listNum]->unZip();
-            }
             break;
         case 'R':
             lists[promptIntBetween("Reverse which list? ", 0, NUM_LISTS - 1)]->reverse();

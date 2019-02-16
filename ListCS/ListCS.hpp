@@ -1,5 +1,6 @@
 // File: ListCS/ListCS.hpp
 
+
 #ifndef LISTCS_HPP_
 #define LISTCS_HPP_
 
@@ -38,10 +39,6 @@ public:
 
     void clear();
     // Post: This list is cleared to the empty list.
-
-    void concat(ListCS<T> &suffix);
-    // Post: suffix is appended to this list.
-    // suffix is empty (cut concatenate, as opposed to copy concatenate).
 
     bool contains(T const &data) const;
     // Post: true is returned if data is contained in this list;
@@ -123,15 +120,6 @@ public:
 
     void toStream(ostream &os) const;
     // Post: A string representation of this list is returned.
-
-    ListCS<T> *unZip();
-    // Post: This is every other element of this list starting with the first.
-    // A pointer to a list with every other element of this list starting with the second is returned.
-
-    void zip(ListCS<T> &other);
-    // Post: This list is a perfect shuffle of this list and other
-    // starting with the first element of this.
-    // other is the empty list (cut zip, as opposed to copy zip).
 };
 
 // ========= AcsNode =========
@@ -149,7 +137,6 @@ public:
 protected:
     virtual void append(ListCS<T> &owner, T const &data) = 0;
     virtual void clear(ListCS<T> &owner) = 0;
-    virtual void concat(ListCS<T> &owner, ListCS<T> &suffix) = 0;
     virtual bool contains(T const &data) const = 0;
 private:
     virtual AcsNode *copyHead() = 0;
@@ -176,8 +163,6 @@ protected:
     virtual void toStreamHelper(ostream &os) const = 0;
     // Post: A string representation of this list is returned
     // except for the leading open parenthesis "(", which is omitted.
-    virtual ListCS<T> *unZip() = 0;
-    virtual void zip(ListCS<T> &owner, ListCS<T> &other) = 0;
 };
 
 // ========= MTcsNode =========
@@ -195,7 +180,6 @@ private:
 protected:
     void append(ListCS<T> &owner, T const &data);
     void clear(ListCS<T> &owner);
-    void concat(ListCS<T> &owner, ListCS<T> &suffix);
     bool contains(T const &data) const;
 private:
     AcsNode<T> *copyHead();
@@ -220,8 +204,6 @@ protected:
     void setList(ListCS<T> &owner, ListCS<T> &list);
     void toStream(ostream &os) const;
     void toStreamHelper(ostream &os) const;
-    ListCS<T> *unZip();
-    void zip(ListCS<T> &owner, ListCS<T> &other);
 };
 
 // ========= NEcsNode =========
@@ -250,7 +232,6 @@ private:
 protected:
     void append(ListCS<T> &owner, T const &data) override;
     void clear(ListCS<T> &owner) override;
-    void concat(ListCS<T> &owner, ListCS<T> &suffix) override;
     bool contains(T const &data) const override;
 private:
     AcsNode<T> *copyHead() override;
@@ -275,8 +256,6 @@ protected:
     void setList(ListCS<T> &owner, ListCS<T> &list) override;
     void toStream(ostream &os) const override;
     void toStreamHelper(ostream &os) const override;
-    ListCS<T> *unZip() override;
-    void zip(ListCS<T> &owner, ListCS<T> &other) override;
 };
 
 // ========= Constructors =========
@@ -315,77 +294,54 @@ ListCS<T>::~ListCS() {
 // ========= append =========
 template<class T>
 void ListCS<T>::append(T const &data) {
-    cerr << "ListCS<T>::append: Exercise for the student." << endl;
-    throw -1;
+    _head->append(*this, data);
 }
 
 template<class T>
 void MTcsNode<T>::append(ListCS<T> &owner, T const &data) {
-    cerr << "MTcsNode<T>::append: Exercise for the student." << endl;
-    throw -1;
+    this->prepend(owner, data);
 }
 
 template<class T>
 void NEcsNode<T>::append(ListCS<T> &owner, T const &data) {
-    cerr << "NEcsNode<T>::append: Exercise for the student." << endl;
-    throw -1;
+        _rest.append(data);
 }
 
 // ========= clear =========
 template<class T>
 void ListCS<T>::clear() {
-    cerr << "ListCS<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    _head->clear(*this);
 }
 
 template<class T>
-void MTcsNode<T>::clear(ListCS<T> &owner) {
-    cerr << "MTcsNode<T>::clear: Exercise for the student." << endl;
-    throw -1;
+void MTcsNode<T>::clear(ListCS<T> &owner) {   
 }
 
 template<class T>
 void NEcsNode<T>::clear(ListCS<T> &owner) {
-    cerr << "NEcsNode<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    _rest.clear();
+    owner = new MTcsNode<T>();
 }
 
-// ========= concat =========
-template<class T>
-void ListCS<T>::concat(ListCS<T> &suffix) {
-    cerr << "ListCS<T>::concat: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-void MTcsNode<T>::concat(ListCS<T> &owner, ListCS<T> &suffix) {
-    cerr << "MTcsNode<T>::concat: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-void NEcsNode<T>::concat(ListCS<T> &owner, ListCS<T> &suffix) {
-    cerr << "NEcsNode<T>::concat: Exercise for the student." << endl;
-    throw -1;
-}
 
 // ========= contains =========
 template<class T>
 bool ListCS<T>::contains(T const &data) const {
-    cerr << "ListCS<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    return _head->contains(data);
 }
 
 template<class T>
 bool MTcsNode<T>::contains(T const &data) const {
-    cerr << "MTcsNode<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    return false;
 }
 
 template<class T>
 bool NEcsNode<T>::contains(T const &data) const {
-    cerr << "NEcsNode<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    if(_data == data){
+        return true;
+    }
+    return _rest.contains(data);
+    
 }
 
 // ========= copyHead =========
@@ -407,77 +363,70 @@ AcsNode<T> *NEcsNode<T>::copyHead() {
 // ========= equals =========
 template<class T>
 bool ListCS<T>::equals(ListCS<T> const &rhs) const {
-    cerr << "ListCS<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return _head->equals(rhs);
 }
 
 template<class T>
 bool MTcsNode<T>::equals(ListCS<T> const &rhs) const {
-    cerr << "MTcsNode<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return rhs.isEmpty();
 }
 
 template<class T>
 bool NEcsNode<T>::equals(ListCS<T> const &rhs) const {
-    cerr << "NEcsNode<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return rhs.equalsHelper(_data, _rest);
 }
 
 // --------- equalsHelper ---------
 template<class T>
 bool ListCS<T>::equalsHelper(T const &first, ListCS<T> const &rest) const {
-    cerr << "ListCS<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    return _head->equalsHelper(first, rest);
 }
 
 template<class T>
 bool MTcsNode<T>::equalsHelper(T const &first, ListCS<T> const &rest) const {
-    cerr << "MTcsNode<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    return false;
 }
 
 template<class T>
 bool NEcsNode<T>::equalsHelper(T const &first, ListCS<T> const &rest) const {
-    cerr << "NEcsNode<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    if( _data != first){
+       return false;
+    }
+    return _rest.equals(rest);
 }
 
 // ========= first =========
 template<class T>
 T &ListCS<T>::first() {
-    cerr << "ListCS<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _head->first();
 }
 
 template<class T>
 T &MTcsNode<T>::first() {
-    cerr << "MTcsNode<T>::first: Exercise for the student." << endl;
+    cerr << "MTcsNode<T>::first: The list is empty." << endl;
     throw -1;
 }
 
 template<class T>
 T &NEcsNode<T>::first() {
-    cerr << "NEcsNode<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= first const =========
 template<class T>
 T const &ListCS<T>::first() const {
-    cerr << "ListCS<T>::first: Exercise for the student." << endl;
-    throw -1;
+    _head->first();
 }
 
 template<class T>
 T const &MTcsNode<T>::first() const {
-    cerr << "MTcsNode<T>::first: Exercise for the student." << endl;
+    cerr << "MTcsNode<T>::first: The list is empty." << endl;
     throw -1;
 }
 
 template<class T>
 T const &NEcsNode<T>::first() const {
-    cerr << "NEcsNode<T>::first: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= isEmpty =========
@@ -499,20 +448,17 @@ bool NEcsNode<T>::isEmpty() const {
 // ========= length =========
 template<class T>
 int ListCS<T>::length() const {
-    cerr << "ListCS<T>::length: Exercise for the student." << endl;
-    throw -1;
+    return _head->length();
 }
 
 template<class T>
 int MTcsNode<T>::length() const {
-    cerr << "MTcsNode<T>::length: Exercise for the student." << endl;
-    throw -1;
+    return 0;
 }
 
 template<class T>
 int NEcsNode<T>::length() const {
-    cerr << "NEcsNode<T>::length: Exercise for the student." << endl;
-    throw -1;
+    return 1 + _rest.length();
 }
 
 // ========= max =========
@@ -592,77 +538,78 @@ void NEcsNode<T>::prepend(ListCS<T> &owner, T const &data) {
 // ========= remFirst =========
 template<class T>
 T ListCS<T>::remFirst() {
-    cerr << "ListCS<T>::remFirst: Exercise for the student." << endl;
-    throw -1;
+    return _head->remFirst(*this);
 }
 
 template<class T>
 T MTcsNode<T>::remFirst(ListCS<T> &owner) {
-    cerr << "MTcsNode<T>::remFirst: Exercise for the student." << endl;
-    throw -1;
+    cerr<< "MTcsNOde<T>::remFirst: Empty list has no first element.";
+    return -1;
 }
 
 template<class T>
 T NEcsNode<T>::remFirst(ListCS<T> &owner) {
-    cerr << "NEcsNode<T>::remFirst: Exercise for the student." << endl;
-    throw -1;
+    T temp = _data;
+    
+    owner._head = _rest._head;
+    _rest._head = nullptr;
+    delete this;
+    return temp;
 }
 
 // ========= remLast =========
 template<class T>
 T ListCS<T>::remLast() {
-    cerr << "ListCS<T>::remLast: Exercise for the student." << endl;
-    throw -1;
-}
+    return _head->remLast(*this);
+} 
 
 template<class T>
 T MTcsNode<T>::remLast(ListCS<T> &owner) {
-    cerr << "MTcsNode<T>::remLast: Exercise for the student." << endl;
+    cerr << "MTcsNode<T>::remLast: Empty list has no element" << endl;
     throw -1;
 }
 
 template<class T>
 T NEcsNode<T>::remLast(ListCS<T> &owner) {
-    cerr << "NEcsNode<T>::remLast: Exercise for the student." << endl;
-    throw -1;
+    return _rest.remLastHelper(owner);
 }
 
 // --------- remLastHelper ---------
 template<class T>
 T ListCS<T>::remLastHelper(ListCS<T> &previous) {
-    cerr << "ListCS<T>::remLastHelper: Exercise for the student." << endl;
-    throw -1;
+    return _head->remLastHelper(*this ,previous);
 }
 
 template<class T>
 T MTcsNode<T>::remLastHelper(ListCS<T> &owner, ListCS<T> &previous) {
-    cerr << "MTcsNode<T>::remLastHelper: Exercise for the student." << endl;
-    throw -1;
+    return previous.remFirst();
 }
 
 template<class T>
 T NEcsNode<T>::remLastHelper(ListCS<T> &owner, ListCS<T> &previous) {
-    cerr << "NEcsNode<T>::remLastHelper: Exercise for the student." << endl;
-    throw -1;
+    return _rest.remLastHelper(owner);
 }
 
 // ========= remove =========
 template<class T>
 void ListCS<T>::remove(T const &data) {
-    cerr << "ListCS<T>::remove: Exercise for the student." << endl;
-    throw -1;
+    _head->remove(*this, data);
 }
 
 template<class T>
 void MTcsNode<T>::remove(ListCS<T> &owner, T const &data) {
-    cerr << "MTcsNode<T>::remove: Exercise for the student." << endl;
-    throw -1;
+    
 }
 
 template<class T>
 void NEcsNode<T>::remove(ListCS<T> &owner, T const &data) {
-    cerr << "NEcsNode<T>::remove: Exercise for the student." << endl;
-    throw -1;
+    if(this->_data == data){
+        owner._head = this->_rest._head;
+        this->_rest._head = nullptr;
+        delete this;
+    }else{
+        _rest.remove(data);
+    }
 }
 
 // ========= rest =========
@@ -702,39 +649,37 @@ ListCS<T> const &NEcsNode<T>::rest() const {
 // ========= reverse =========
 template<class T>
 void ListCS<T>::reverse() {
-    cerr << "ListCS<T>::reverse: Exercise for the student." << endl;
-    throw -1;
+    _head->reverse(*this);
 }
 
 template<class T>
 void MTcsNode<T>::reverse(ListCS<T> &owner) {
-    cerr << "MTcsNode<T>::reverse: Exercise for the student." << endl;
-    throw -1;
+    
 }
 
 template<class T>
 void NEcsNode<T>::reverse(ListCS<T> &owner) {
-    cerr << "NEcsNode<T>::reverse: Exercise for the student." << endl;
-    throw -1;
+    ListCS<T> revList; 
+    owner.reverseHelper(revList);
+    owner.setList(revList);
 }
 
 // --------- reverseHelper ---------
 template<class T>
 void ListCS<T>::reverseHelper(ListCS<T> &revList) {
-    cerr << "ListCS<T>::reverseHelper: Exercise for the student." << endl;
-    throw -1;
+    _head->reverseHelper(*this, revList);
 }
 
 template<class T>
 void MTcsNode<T>::reverseHelper(ListCS<T> &owner, ListCS<T> &revList) {
-    cerr << "MTcsNode<T>::reverseHelper: Exercise for the student." << endl;
-    throw -1;
+    
 }
 
 template<class T>
-void NEcsNode<T>::reverseHelper(ListCS<T> &owner, ListCS<T> &revList) {
-    cerr << "NEcsNode<T>::reverseHelper: Exercise for the student." << endl;
-    throw -1;
+void NEcsNode<T>::reverseHelper(ListCS<T> &owner, ListCS<T> &revList) {  
+    revList.prepend(owner.remFirst());
+    owner.reverseHelper(revList);
+    
 }
 
 // ========= setList =========
@@ -784,44 +729,6 @@ template<class T>
 void NEcsNode<T>::toStreamHelper(ostream &os) const {
     os << ", " << _data;
     _rest._head->toStreamHelper(os);
-}
-
-// ========= unZip =========
-template<class T>
-ListCS<T> *ListCS<T>::unZip() {
-    cerr << "ListCS<T>::unZip: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-ListCS<T> *MTcsNode<T>::unZip() {
-    cerr << "MTcsNode<T>::unZip: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-ListCS<T> *NEcsNode<T>::unZip() {
-    cerr << "NEcsNode<T>::unZip: Exercise for the student." << endl;
-    throw -1;
-}
-
-// ========= zip =========
-template<class T>
-void ListCS<T>::zip(ListCS<T> &other) {
-    cerr << "ListCS<T>::zip: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-void MTcsNode<T>::zip(ListCS<T> &owner, ListCS<T> &other) {
-    cerr << "MTcsNode<T>::zip(ListCS: Exercise for the student." << endl;
-    throw -1;
-}
-
-template<class T>
-void NEcsNode<T>::zip(ListCS<T> &owner, ListCS<T> &other) {
-    cerr << "NEcsNode<T>::zip: Exercise for the student." << endl;
-    throw -1;
 }
 
 #endif
