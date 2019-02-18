@@ -24,24 +24,34 @@ public:
 
     // ========= visit =========
     void emptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        _found = false;
     }
 
     void nonEmptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        if (_key < host.root(). key()){
+            host.left().accept(*this);
+        } else if (_key > host.root().key()){
+            host.right().accept(*this);
+        } else {
+            _val = &host.root().val();
+            _found = true;
+        }
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV< DictPair<K, V> > const &host) override {
-        cerr << "DictTcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        _found = false;
     }
 
     void nonEmptyCase(BiTreeCSV< DictPair<K, V> > const &host) override {
-        cerr << "DictTcontainsVis: Exercise for the student." << endl;
-        throw -1;
+       if (_key < host.root(). key()){
+            host.left().accept(*this);
+        } else if (_key > host.root().key()){
+            host.right().accept(*this);
+        } else {
+            _val = &host.root().val();
+            _found = true;
+        }
     }
 
     // ========= result =========
@@ -50,9 +60,9 @@ public:
     // otherwise false is returned.
     bool result(V &val) const {
         if (_found) {
-            cerr << "DictTcontainsVis: Exercise for the student." << endl;
-            throw -1;
+            val = *_val;
         }
+        return _found;
     }
 };
 

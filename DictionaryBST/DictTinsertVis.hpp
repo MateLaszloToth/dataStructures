@@ -26,13 +26,18 @@ public:
     // Pre: This visitor has been accepted by a host tree.
     // Post: The host dictionary contains key and its associated value, val.
     void emptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTinsertVis: Exercise for the student." << endl;
-        throw -1;
+        host.insertRoot(DictPair<K, V> (_key, _val));
     }
 
     void nonEmptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTinsertVis: Exercise for the student." << endl;
-        throw -1;
+        if (_key < host.root().key()){
+            host.left().accept(*this);
+        } else if (_key > host.root().key()){
+            host.right().accept(*this);
+        } else {
+            host.remRoot();
+            host.insertRoot(DictPair<K, V>(_key, _val));
+        }
     }
 
     // ========= visit const =========

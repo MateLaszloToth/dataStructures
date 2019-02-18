@@ -28,13 +28,28 @@ public:
     // ========= visit =========
 
     void emptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTremoveVis: Exercise for the student." << endl;
-        throw -1;
+        _found = false;
     }
 
     void nonEmptyCase(BiTreeCSV< DictPair<K, V> > &host) override {
-        cerr << "DictTremoveVis: Exercise for the student." << endl;
-        throw -1;
+        if (_key < host.root().key()) {
+            host.left().accept(*this);
+        } else if (_key > host.root().key()){
+            host.right().accept(*this);
+        } else {
+            _val = host.root().val();
+            if (isEmpty(host.left())) {
+                host.remRoot();
+            } else {
+                BiTreeCSV< DictPair<K, V> > *maxLeft = &host.left();
+                while (!isEmpty(maxLeft->right())) {
+                    maxLeft = &maxLeft ->right();
+                }
+                host.root() = maxLeft->root();
+                maxLeft->remRoot();
+            }
+            _found = true;
+        }
     }
 
     // ========= visit const =========
@@ -59,9 +74,9 @@ public:
 
     bool result(V &val) const {
         if (_found) {
-            cerr << "DictTremoveVis: Exercise for the student." << endl;
-            throw -1;
+            val = _val;
         }
+        return _found;
     }
 };
 
