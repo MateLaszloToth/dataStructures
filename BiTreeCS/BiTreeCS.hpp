@@ -1,5 +1,6 @@
 // File: BiTreeCS/BiTreeCS.hpp
 
+
 #ifndef BITREECS_HPP_
 #define BITREECS_HPP_
 
@@ -302,39 +303,37 @@ BiTreeCS<T>::~BiTreeCS() {
 // ========= clear =========
 template<class T>
 void BiTreeCS<T>::clear() {
-    cerr << "BiTreeCS<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    _root->clear(*this);
+    _root = new MTcsNode<T>(); 
 }
 
 template<class T>
 void MTcsNode<T>::clear(BiTreeCS<T> &) {
-    cerr << "MTcsNode<T>::clear: Exercise for the student." << endl;
-    throw -1;
 }
 
 template<class T>
 void NEcsNode<T>::clear(BiTreeCS<T> &owner) {
-    cerr << "NEcsNode<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    _left.clear(); 
+    _right.clear();
 }
 
 // ========= contains =========
 template<class T>
 bool BiTreeCS<T>::contains(T const &data) const {
-    cerr << "BiTreeCS<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    return _root->contains(data);
 }
 
 template<class T>
 bool MTcsNode<T>::contains(T const &data) const {
-    cerr << "MTcsNode<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    return false;
 }
 
 template<class T>
 bool NEcsNode<T>::contains(T const &data) const {
-    cerr << "NEcsNode<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    if(_data == data) {
+        return true;
+    }
+    return _left.contains(data) || _right.contains(data);
 }
 
 // ========= copyRoot =========
@@ -356,77 +355,72 @@ AcsNode<T> *NEcsNode<T>::copyRoot() {
 // ========= equals =========
 template<class T>
 bool BiTreeCS<T>::equals(BiTreeCS<T> const &rhs) const {
-    cerr << "BiTreeCS<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return _root->equals(rhs);
 }
 
 template<class T>
 bool MTcsNode<T>::equals(BiTreeCS<T> const &rhs) const {
-    cerr << "MTcsNode<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return rhs.isEmpty();
 }
 
 template<class T>
 bool NEcsNode<T>::equals(BiTreeCS<T> const &rhs) const {
-    cerr << "NEcsNode<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return rhs.equalsHelper(_data, _left, _right);
 }
 
 // --------- equalsHelper ---------
 template<class T>
 bool BiTreeCS<T>::equalsHelper(T const &data, BiTreeCS<T> const &left, BiTreeCS<T> const &right) const {
-    cerr << "BiTreeCS<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    return _root->equalsHelper(data,left,right);
 }
 
 template<class T>
 bool MTcsNode<T>::equalsHelper(T const &, BiTreeCS<T> const &, BiTreeCS<T> const &) const {
-    cerr << "MTcsNode<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    return false;
 }
 
 template<class T>
 bool NEcsNode<T>::equalsHelper(T const &data, BiTreeCS<T> const &left, BiTreeCS<T> const &right) const {
-    cerr << "NEcsNode<T>::equalsHelper: Exercise for the student." << endl;
-    throw -1;
+    if (_data != data) {
+        return false;
+    }
+    return _left.equals(left) && _right.equals(right);
 }
 
 // ========= height =========
 template<class T>
 int BiTreeCS<T>::height() const {
-    cerr << "BiTreeCS<T>::height: Exercise for the student." << endl;
-    throw -1;
+    if(isEmpty()) {
+        return 0;
+    }
+    return 1 + _root->height();
 }
 
 template<class T>
 int MTcsNode<T>::height() const {
-    cerr << "MTcsNode<T>::height: Exercise for the student." << endl;
-    throw -1;
+    return 0;
 }
 
 template<class T>
 int NEcsNode<T>::height() const {
-    cerr << "NEcsNode<T>::height: Exercise for the student." << endl;
-    throw -1;
+    return _right.height() > _left.height() ? _right.height() : _left.height();
 }
 
 // ========= inOrder =========
 template<class T>
 void BiTreeCS<T>::inOrder(ostream &os) const {
-    cerr << "BiTreeCS<T>::inOrder: Exercise for the student." << endl;
-    throw -1;
+    _root->inOrder(os);
 }
 
 template<class T>
 void MTcsNode<T>::inOrder(ostream &os) const {
-    cerr << "MTcsNode<T>::inOrder: Exercise for the student." << endl;
-    throw -1;
 }
 
 template<class T>
 void NEcsNode<T>::inOrder(ostream &os) const {
-    cerr << "NEcsNode<T>::inOrder: Exercise for the student." << endl;
-    throw -1;
+    _left.inOrder(os);
+    os << _data << "  ";
+    _right.inOrder(os);
 }
 
 // ========= insertRoot =========
@@ -522,20 +516,20 @@ T const &NEcsNode<T>::max() const {
 // ========= numLeaves =========
 template<class T>
 int BiTreeCS<T>::numLeaves() const {
-    cerr << "BiTreeCS<T>::numLeaves: Exercise for the student." << endl;
-    throw -1;
+    return _root->numLeaves();
 }
 
 template<class T>
 int MTcsNode<T>::numLeaves() const {
-    cerr << "MTcsNode<T>::numLeaves: Exercise for the student." << endl;
-    throw -1;
+    return 0;
 }
 
 template<class T>
 int NEcsNode<T>::numLeaves() const {
-    cerr << "NEcsNode<T>::numLeaves: Exercise for the student." << endl;
-    throw -1;
+    if(_left.numNodes() == 0 && _right.numNodes() == 0) {
+        return 1;
+    }
+    return _left.numLeaves() + _right.numLeaves();
 }
 
 // ========= numNodes =========
@@ -580,20 +574,18 @@ ostream& operator<<(ostream& os, const BiTreeCS<T>& rhs) {
 // ========= postOrder =========
 template<class T>
 void BiTreeCS<T>::postOrder(ostream &os) const {
-    cerr << "BiTreeCS<T>::postOrder: Exercise for the student." << endl;
-    throw -1;
+    _root->postOrder(os);
 }
 
 template<class T>
 void MTcsNode<T>::postOrder(ostream &os) const {
-    cerr << "MTcsNode<T>::postOrder: Exercise for the student." << endl;
-    throw -1;
 }
 
 template<class T>
 void NEcsNode<T>::postOrder(ostream &os) const {
-    cerr << "NEcsNode<T>::postOrder: Exercise for the student." << endl;
-    throw -1;
+    _left.postOrder(os);
+    _right.postOrder(os);
+    os << _data << "  ";
 }
 
 // ========= preOrder =========
@@ -616,20 +608,20 @@ void NEcsNode<T>::preOrder(ostream &os) const {
 // ========= remLeaves =========
 template<class T>
 void BiTreeCS<T>::remLeaves() {
-    cerr << "BiTreeCS<T>::remLeaves: Exercise for the student." << endl;
-    throw -1;
+    _root->remLeaves(*this);
 }
 
 template<class T>
 void MTcsNode<T>::remLeaves(BiTreeCS<T> &owner) {
-    cerr << "MTcsNode<T>::remLeaves: Exercise for the student." << endl;
-    throw -1;
 }
 
 template<class T>
 void NEcsNode<T>::remLeaves(BiTreeCS<T> &owner) {
-    cerr << "NEcsNode<T>::remLeaves: Exercise for the student." << endl;
-    throw -1;
+    if(_left.isEmpty() && _right.isEmpty()) {
+        owner._root = new MTcsNode<T>();
+    }
+    _left.remLeaves();
+    _right.remLeaves();
 }
 
 // ========= remRoot =========
@@ -640,14 +632,27 @@ T BiTreeCS<T>::remRoot() {
 
 template<class T>
 T MTcsNode<T>::remRoot(BiTreeCS<T> &owner) {
-    cerr << "remRoot precondition violated: Cannot remove root from an empty tree." << endl;
+    cerr << "Error";
     throw -1;
 }
 
 template<class T>
 T NEcsNode<T>::remRoot(BiTreeCS<T> &owner) {
-    cerr << "NEcsNode<T>::remRoot: Exercise for the student." << endl;
-    throw -1;
+    T temp = _data;
+    if(_left.isEmpty() && _right.isEmpty()) {
+        owner._root = new MTcsNode<T>;
+    }
+    if(_left.numNodes() != 0 && _right.numNodes() != 0) {
+        cerr << "Error";
+        throw -1;
+    }
+    if(_right.isEmpty()) {
+        owner._root = this->_left._root;
+    } 
+    if(_left.isEmpty()) {
+        owner._root = this->_right._root;
+    }
+    return temp;
 }
 
 // ========= right =========
@@ -687,39 +692,35 @@ BiTreeCS<T> const &NEcsNode<T>::right() const {
 // ========= root =========
 template<class T>
 T &BiTreeCS<T>::root() {
-    cerr << "BiTreeCS<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _root->root();
 }
 
 template<class T>
 T &MTcsNode<T>::root() {
-    cerr << "MTcsNode<T>::root: Exercise for the student." << endl;
+    cerr << "Error" << endl;
     throw -1;
 }
 
 template<class T>
 T &NEcsNode<T>::root() {
-    cerr << "NEcsNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _data; 
 }
 
 // ========= root const =========
 template<class T>
 T const &BiTreeCS<T>::root() const {
-    cerr << "BiTreeCS<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _root->root();
 }
 
 template<class T>
 T const &MTcsNode<T>::root() const {
-    cerr << "MTcsNode<T>::root: Exercise for the student." << endl;
+    cerr << "Error" << endl;
     throw -1;
 }
 
 template<class T>
 T const &NEcsNode<T>::root() const {
-    cerr << "NEcsNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= setTree =========
