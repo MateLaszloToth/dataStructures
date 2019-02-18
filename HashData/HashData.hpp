@@ -31,22 +31,26 @@ public:
     // Post: If x is not in the chain, installs x in the hash table
     // at the beginning of the appropriate chain.
     void insert(CAMetricsStr const &x) {
-        cerr << "HashTable::insert: Exercise for the student." << endl;
-        throw -1;
+       if(!_ht[_hashFunction(x) % _ht.cap()].contains(x)){
+            _ht[_hashFunction(x) % _ht.cap()].prepend(x);
+        }
     }
 
     // Post: Returns true if this hash table contains x.
     bool contains(CAMetricsStr const &x) const {
-        cerr << "HashTable::contains: Exercise for the student." << endl;
-        throw -1;
+        return _ht[_hashFunction(x) % _ht.cap()].contains(x);
+ 
     }
 
     // Post: Sends the entire hash table to os. For each index of the
     // hash table that contains a nonempty chain, outputs that index
     // followed by ": " followed by the chain.
     void toStream(ostream &os) const {
-        cerr << "HashTable::toStream: Exercise for the student." << endl;
-        throw -1;
+        for(int i = 0; i < _ht.cap(); i++){
+            if(!_ht[i].isEmpty()){
+                os << i << ": " << _ht[i] << endl;
+            }
+        }
     }
 };
 
@@ -58,3 +62,10 @@ ostream &operator<<(ostream &os, HashTable const &rhs) {
 }
 
 #endif
+//for (int i = 0; i < _ht.cap(); i++){
+//            if (!_ht[i].isEmpty()){
+//                cout << "i" << ":";
+//                _ht[i].toStream(os);
+//                cout << endl;
+//            }
+//        }
