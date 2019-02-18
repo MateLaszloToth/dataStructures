@@ -1,5 +1,6 @@
 // File: LLRBTree/LLRBTree.hpp
 
+
 #ifndef LLRBTREE_HPP_
 #define LLRBTREE_HPP_
 
@@ -150,10 +151,17 @@ Node<T>::~Node() {
 // ========= contains =========
 template<class T>
 bool LLRBTree<T>::contains(T const &data) {
-    Node<T> *p = _root;
+   Node<T> *p = _root;
     while (p != nullptr) {
-        cerr << "contains(): Exercise for the student." << endl;
-        throw -1;
+        if(p->_data == data){
+            return true;
+        }
+        else if(data < p->_data){
+            p= p->_left;
+        }
+        else{
+            p= p->_right;
+        }
     }
     return false;
 }
@@ -184,8 +192,8 @@ void Node<T>::flipColors(Node<T> *h) {
         throw -1;
     }
     h->_color = !h->_color;
-    cerr << "flipColors(): Exercise for the student." << endl;
-    throw -1;
+    h->_left->_color = !h->_left->_color;
+    h->_right->_color = !h->_right->_color;
 }
 
 // ========= insert =========
@@ -218,8 +226,12 @@ bool Node<T>::isRed(Node<T> *h) {
 // ========= min =========
 template<class T>
 T Node<T>::min(Node<T> *h) {
-    cerr << "min(): Exercise for the student." << endl;
-    throw -1;
+    Node<T> *p= h->_left;
+    while (p != nullptr) {
+        h= p;
+        p=p->_left;
+    }
+    return h->_data;
 }
 
 // ========= moveRedLeft =========
@@ -341,8 +353,16 @@ Node<T> *Node<T>::rotateLeft(Node<T> *h) {
 // ========= rotateRight =========
 template<class T>
 Node<T> *Node<T>::rotateRight(Node<T> *h) {
-    cerr << "rotateRight(): Exercise for the student." << endl;
-    throw -1;
+    if (!isRed(h->_left)){
+        cerr << "rotateRight precondition failed" << endl;
+                throw -1;
+    }
+    Node<T> *p = h->_left;
+    h->_left = p->_right;
+    p->_right = h;
+    p->_color = h->_color;
+    h->_color = RED;
+    return p;
 }
 
 // ========= operator<< =========
