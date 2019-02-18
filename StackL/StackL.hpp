@@ -1,4 +1,7 @@
 // File: StackL/StackL.hpp
+// Name: Mate Toth
+// Date: Oct/19
+// A: 13
 
 #ifndef STACKL_HPP_
 #define STACKL_HPP_
@@ -59,9 +62,12 @@ bool StackL<T>::isEmpty() const {
 // ========= pop =========
 template<class T>
 T StackL<T>::pop() {
-    cerr << "StackL<T>::pop: Exercise for the student." << endl;
-    // Don't forget the precondition.
-    throw -1;
+    if(_listL->isEmpty()){
+        cerr<< "StackL::pop precondition violation: the stack is empty"<< endl;
+        throw -1;
+    }else{
+       return _listL->remFirst();
+    }
 }
 
 // ========= push =========
@@ -73,9 +79,12 @@ void StackL<T>::push(const T &val) {
 // ========= topOf =========
 template<class T>
 T const &StackL<T>::topOf() const {
-    cerr << "StackL<T>::topOf: Exercise for the student." << endl;
-    // Don't forget the precondition.
-    throw -1;
+    if(_listL->isEmpty()){
+        cerr<< "StackL::pop precondition violation: the stack is empty"<< endl;
+        throw -1;
+    }else{
+       return _listL->first();
+    }
 }
 
 // ========= operator<< =========
