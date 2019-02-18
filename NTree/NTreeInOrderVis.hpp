@@ -1,3 +1,5 @@
+
+
 #ifndef NTREEINORDERVIS_HPP_
 #define NTREEINORDERVIS_HPP_
 
@@ -11,7 +13,7 @@ using namespace std;
 template<class T>
 class NTreeInOrderVis : public ANTreeVis<T> {
 private:
-    ostream &_os; // Input paramter.
+    ostream &_os; // Input parameter.
 
 public:
     // ========= Constructor =========
@@ -26,13 +28,16 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NTreeInOrderVis: Exercise for the student." << endl;
-            throw -1;
+            break;
         }
         default:
         {
-            cerr << "NTreeInOrderVis: Exercise for the student." << endl;
-            throw -1;
+            host.getChild(0)->accept(*this);
+            for (int i = 0; i < size; i++) {
+                _os << host.getData(i) << "  ";
+                host.getChild(i + 1)->accept(*this);
+            }
+            break;
         }
         }
     }
@@ -41,25 +46,28 @@ public:
 
     void caseAt(int size, NTree<T> const &host) override {
         switch (size) {
-        case 0:
-        {
-            cerr << "NTreeInOrderVis: Exercise for the student." << endl;
-            throw -1;
-        }
-        default:
-        {
-            cerr << "NTreeInOrderVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            case 0:
+            {
+                break;
+            }
+            default:
+            {
+                host.getChild(0)->accept(*this);
+                for (int i = 0; i < size; i++) {
+                    _os << host.getData(i) << "  ";
+                    host.getChild(i + 1)->accept(*this);
+                }
+                break;
+            }
         }
     }
 };
 
 // Global function for convenience
 template<class T>
-void inOrder(ostream &os, NTree<T> const &tree) {
-    cerr << "inOrder: Exercise for the student." << endl;
-    throw -1;
+void inOrder(ostream &os, const NTree<T> &tree) {
+    NTreeInOrderVis<T> inOrderVis(os);
+    tree.accept(inOrderVis);
 }
 
 #endif

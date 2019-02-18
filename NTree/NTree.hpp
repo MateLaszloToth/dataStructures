@@ -136,8 +136,8 @@ void NTree<T>::spliceAt(int i, NTree<T>* tree) {
         (*_children)[i] = tree->_children->remove(treeSize--);
     }
     for (int k = treeSize; k >= 0; k--) {
-        cerr << "Exercise for the student." << endl;
-        throw -1;
+        _data->insert(i,tree->_data->remove(k));
+        _children->insert(i, tree->_children->remove(k));
     }
 }
 
@@ -152,17 +152,17 @@ void NTree<T>::splitUpAt(int i) {
         cerr << "i == " << i << ", _data->size() == " << _data->size() << endl;
         throw -1;
     }
-    VectorT<T> *newData = new VectorT<T > ();
+    VectorT<T> *newData = new VectorT<T> ();
     VectorP<NTree<T>*> *newChildren = new VectorP<NTree<T>*> ();
     T rootDat = _data->remove(i); // This element will be at the new root.
     for (int k = 0; k < i; k++) {
-        cerr << "Exercise for the student." << endl;
-        throw -1;
+        newData->append(_data->remove(0));
+        newChildren->append( _children->remove(0));
     }
     newChildren->append(_children->remove(0));
     NTree<T> *left, *right;
     if (newData->size() > 0) {
-        left = new NTree(newData, newChildren);
+        left = new NTree(newData, newChildren); 
     } else {
         left = newChildren->remove(0);
         delete newChildren;
@@ -175,10 +175,12 @@ void NTree<T>::splitUpAt(int i) {
         delete _children;
         delete _data;
     }
-    _data = new VectorT<T > ();
+    _data = new VectorT<T> ();
     _data->append(rootDat);
-    cerr << "Exercise for the student." << endl;
-    throw -1;
+    _children = new VectorP<NTree<T>*>();
+    _children->append(left);
+    _children->append(right);
+    
 }
 
 // ========= splitDownAt =========
@@ -198,8 +200,8 @@ void NTree<T>::splitDownAt(int i) {
         delete (_children->remove(0));
     } else {
         NTree<T> *newChild = new NTree(getChild(i), _data->remove(i), getChild(i + 1));
-        cerr << "Exercise for the student." << endl;
-        throw -1;
+        _children->remove(i);
+        (*_children)[i] = newChild;     
     }
 }
 
