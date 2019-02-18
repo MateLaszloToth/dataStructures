@@ -21,40 +21,52 @@ public:
 
     // ========= visit =========
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVheightVis: Exercise for the student." << endl;
-        throw -1;
+        _result = 0;
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVheightVis: Exercise for the student." << endl;
-        throw -1;
+        BiTCSVheightVis<T> LheightVis;
+        BiTCSVheightVis<T> RheightVis;
+        host.left().accept(LheightVis);
+        host.right().accept(RheightVis);
+        if (LheightVis.result() < RheightVis.result()) {
+            _result = RheightVis.result() + 1;
+        } else {
+            _result = LheightVis.result() + 1;
+        }
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVheightVis: Exercise for the student." << endl;
-        throw -1;
+        _result = 0;
     }
 
     void nonEmptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVheightVis: Exercise for the student." << endl;
-        throw -1;
+        BiTCSVheightVis<T> LheightVis;
+        BiTCSVheightVis<T> RheightVis;
+        host.left().accept(LheightVis);
+        host.right().accept(RheightVis);
+        if (LheightVis.result() < RheightVis.result()) {
+            _result = RheightVis.result() + 1;
+        } else {
+            _result = LheightVis.result() + 1;
+        }
     }
 
     // ========= result =========
     // Pre: This visitor has been accepted by a host tree.
     // Post: The height of the host tree is returned.
     int result() const {
-        cerr << "BiTCSVheightVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
 // Global function for convenience
 template<class T>
 int height(BiTreeCSV<T> const &tree) {
-    cerr << "concat: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVheightVis<T> heightVis;
+    tree.accept(heightVis);
+    return heightVis.result();
 }
 
 #endif

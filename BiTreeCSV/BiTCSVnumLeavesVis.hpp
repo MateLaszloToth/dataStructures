@@ -23,40 +23,43 @@ public:
 
     // ========= visit =========
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVnumLeavesVis: Exercise for the student." << endl;
-        throw -1;
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVnumLeavesVis: Exercise for the student." << endl;
-        throw -1;
+        
+        if (isEmpty(host.left()) && isEmpty(host.right())) {
+            _result = _result + 1;
+        }
+        host.left().accept(*this);
+        host.right().accept(*this);
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVnumLeavesVis: Exercise for the student." << endl;
-        throw -1;
     }
 
     void nonEmptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVnumLeavesVis: Exercise for the student." << endl;
-        throw -1;
+        host.left().accept(*this);
+        host.right().accept(*this);
+        if (isEmpty(host.left()) && isEmpty(host.right())) {
+            _result = _result + 1;
+        }
     }
 
     // ========= result =========
     // Pre: This visitor has been accepted by a host tree.
     // Post: The number of leaves of the host tree is returned.
     int result() const {
-        cerr << "BiTCSVnumLeavesVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
 // Global function for convenience
 template<class T>
 int numLeaves(BiTreeCSV<T> const &tree) {
-    cerr << "concat: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVnumLeavesVis<T> numLeavesVis;
+    tree.accept(numLeavesVis);
+    return numLeavesVis.result();
 }
 
 #endif

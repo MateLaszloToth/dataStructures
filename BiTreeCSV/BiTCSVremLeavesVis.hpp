@@ -21,13 +21,15 @@ public:
     // Pre: This visitor has been accepted by a host tree.
     // Post: The leaves are removed from the host tree.
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVremLeavesVis: Exercise for the student." << endl;
-        throw -1;
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVremLeavesVis: Exercise for the student." << endl;
-        throw -1;
+        if (isEmpty(host.left()) && isEmpty(host.right())) {
+            host.remRoot();
+        } else {
+            host.left().accept(*this);
+            host.right().accept(*this);
+        }
     }
 
     // ========= visit const =========
@@ -47,13 +49,13 @@ public:
 // Global function for convenience
 template<class T>
 void remLeaves(BiTreeCSV<T> &tree) {
-    cerr << "remLeaves: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVremLeavesVis<T> remLeavesVis;
+    tree.accept(remLeavesVis);
 }
 
 template<class T>
 void remLeaves(BiTreeCSV<T> const &tree) {
-    cerr << "remLeaves: Exercise for the student." << endl;
+    cerr << "Cannot remove from a const tree." << endl;
     throw -1;
 }
 

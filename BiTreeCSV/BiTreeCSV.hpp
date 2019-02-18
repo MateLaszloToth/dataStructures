@@ -347,8 +347,18 @@ T MTcsvNode<T>::remRoot(BiTreeCSV<T> &owner) {
 
 template<class T>
 T NEcsvNode<T>::remRoot(BiTreeCSV<T> &owner) {
-    cerr << "NEcsvNode<T>::remRoot: Exercise for the student." << endl;
-    throw -1;
+    T temp = _data;
+    if (!isEmpty(_left) && isEmpty(_right)) {
+        owner._root = _left._root;
+        _left._root = new MTcsvNode<T>();
+    } else if (!isEmpty(_right) && isEmpty(_left)) {
+        owner._root = _right._root;
+        _right._root = new MTcsvNode<T>();
+    } else if (isEmpty(_left) && isEmpty(_right)){ // both children exist
+        owner._root = new MTcsvNode<T> ();
+    }
+    delete this;
+    return temp;
 }
 
 // ========= right =========
@@ -390,39 +400,35 @@ BiTreeCSV<T> const &NEcsvNode<T>::right() const {
 // ========= root =========
 template<class T>
 T &BiTreeCSV<T>::root() {
-    cerr << "BiTreeCSV<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _root->root();
 }
 
 template<class T>
 T &MTcsvNode<T>::root() {
-    cerr << "MTcsvNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+        cerr << "The tree cannot be empty." << endl;
+        throw -1;
 }
 
 template<class T>
 T &NEcsvNode<T>::root() {
-    cerr << "NEcsvNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= root const =========
 template<class T>
 T const &BiTreeCSV<T>::root() const {
-    cerr << "BiTreeCSV<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _root->root();
 }
 
 template<class T>
 T const &MTcsvNode<T>::root() const {
-    cerr << "MTcsvNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+        cerr << "The tree cannot be empty." << endl;
+        throw -1;
 }
 
 template<class T>
 T const &NEcsvNode<T>::root() const {
-    cerr << "NEcsvNode<T>::root: Exercise for the student." << endl;
-    throw -1;
+    return _data;
 }
 
 // ========= setTree =========

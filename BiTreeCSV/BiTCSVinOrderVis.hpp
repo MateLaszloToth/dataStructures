@@ -24,32 +24,31 @@ public:
     // Pre: This visitor has been accepted by a host tree.
     // Post: A inOrder representation of this tree is sent to os.
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVinOrderVis: Exercise for the student." << endl;
-        throw -1;
+        
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVinOrderVis: Exercise for the student." << endl;
-        throw -1;
+        host.left().accept(*this);
+        _os << host.root() << "  ";
+        host.right().accept(*this);
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVinOrderVis: Exercise for the student." << endl;
-        throw -1;
     }
 
     void nonEmptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVinOrderVis: Exercise for the student." << endl;
-        throw -1;
+        host.left().accept(*this);
+        _os << host.root() << "  ";
+        host.right().accept(*this);
     }
 };
 
 // Global function for convenience
 template<class T>
 void inOrder(ostream &os, BiTreeCSV<T> const &tree) {
-    cerr << "concat: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVinOrderVis<T> inOrderVis(os);
+    tree.accept(inOrderVis);
 }
 
 #endif

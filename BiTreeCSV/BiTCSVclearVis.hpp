@@ -20,13 +20,12 @@ public:
     // Pre: This visitor has been accepted by a host tree.
     // Post: This tree is cleared to the empty tree.
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVclearVis: Exercise for the student." << endl;
-        throw -1;
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVclearVis: Exercise for the student." << endl;
-        throw -1;
+        host.left().accept(*this);
+        host.right().accept(*this);
+        host.remRoot();
     }
 
     // ========= visit const =========
@@ -46,8 +45,8 @@ public:
 // Global function for convenience
 template<class T>
 void clear(BiTreeCSV<T> &tree) {
-    cerr << "concat: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVclearVis<T> clearVis;
+    tree.accept(clearVis);
 }
 
 #endif

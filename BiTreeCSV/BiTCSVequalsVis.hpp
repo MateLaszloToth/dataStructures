@@ -1,5 +1,6 @@
 // File: BiTreeCSV/BiTCSVequalsVis.hpp
 
+
 #ifndef BITCSVEQUALSVIS_HPP_
 #define BITCSVEQUALSVIS_HPP_
 
@@ -26,24 +27,24 @@ public:
 
     // ========= visit =========
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        _result = isEmpty(_rhs);
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        BiTCSVequalsHelperVis<T> equalsHelperVis(host.root(), host.left(), host.right());
+        _rhs.accept(equalsHelperVis);
+        _result = equalsHelperVis.result();
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        _result = isEmpty(_rhs);
     }
 
     void nonEmptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        BiTCSVequalsHelperVis<T> equalsHelperVis(host.root(), host.left(), host.right());
+        _rhs.accept(equalsHelperVis);
+        _result = equalsHelperVis.result();
     }
 
     // ========= result =========
@@ -53,8 +54,7 @@ public:
     // Two trees are equal if they contain the same number of equal elements
     // with the same shape.
     bool result() const {
-        cerr << "BiTCSVequalsVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -76,24 +76,20 @@ public:
 
     // ========= visit =========
     void emptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(BiTreeCSV<T> &host) override {
-        cerr << "BiTCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = host.root() == _data && host.left() == _left && host.right() == _right;
     }
 
     // ========= visit const =========
     void emptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = false;
     }
 
     void nonEmptyCase(BiTreeCSV<T> const &host) override {
-        cerr << "BiTCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        _result = host.root() == _data && host.left() == _left && host.right() == _right;
     }
 
     // ========= result =========
@@ -102,8 +98,7 @@ public:
     // left equals host.left(), and right equals host.right();
     // otherwise, false is returned.
     bool result() const {
-        cerr << "BiTCSVequalsHelperVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -111,8 +106,9 @@ public:
 // ========= operator== =========
 template<class T>
 bool operator==(BiTreeCSV<T> const &lhs, BiTreeCSV<T> const &rhs) {
-    cerr << "operator==: Exercise for the student." << endl;
-    throw -1;
+    BiTCSVequalsVis<T> equalsVis(rhs);
+    lhs.accept(equalsVis);
+    return equalsVis.result();
 }
 
 #endif
