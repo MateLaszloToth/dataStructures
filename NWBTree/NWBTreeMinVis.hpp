@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeMinVis.hpp
+//File: NWBTree/NWBTreeMinVis.hpp
 
 #ifndef NWBTREEMINVIS_HPP_
 #define NWBTREEMINVIS_HPP_
@@ -25,14 +25,16 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            isEmpty(host);
+        } break;
         default:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (!isEmpty(*host.getChild(0))) {
+                host.getChild(0)->accept(*this);
+            } else {
+                _result = host.getData(0);
+            }
+        } break;
         }
     }
 
@@ -42,14 +44,16 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            isEmpty(host);
+        } break;
         default:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (!isEmpty(*host.getChild(0))) {
+                host.getChild(0)->accept(*this);
+            } else {
+                _result = host.getData(0);
+            }
+        } break;
 
         }
     }
@@ -60,8 +64,7 @@ public:
     // Post: The minimum value of the tree is returned.
 
     T result() const {
-        cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -69,8 +72,9 @@ public:
 
 template<class T>
 T min(NTree<T> const &tree) {
-    cerr << "min: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeMinVis<T> minVis;
+    tree.accept(minVis);
+    return minVis.result();
 }
 
 #endif

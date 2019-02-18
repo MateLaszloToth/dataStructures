@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeHeightVis.hpp
+//File: NWBTree/NWBTreeHeightVis.hpp
 
 #ifndef NWBTREEHEIGHTVIS_HPP_
 #define NWBTREEHEIGHTVIS_HPP_
@@ -24,13 +24,13 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeHeightVis: Exercise for the student." << endl;
-            throw -1;
+           break;
         }
         default:
         {
-            cerr << "NWBTreeHeightVis: Exercise for the student." << endl;
-            throw -1;
+            _result++;
+            host.getChild(0)->accept(*this);
+            break;
         }
         }
     }
@@ -38,16 +38,16 @@ public:
     // ========= visit const =========
     void caseAt(int size, NTree<T> const &host) override {
         switch (size) {
-        case 0:
-        {
-            cerr << "NWBTreeHeightVis: Exercise for the student." << endl;
-            throw -1;
-        }
-        default:
-        {
-            cerr << "NWBTreeHeightVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            case 0:
+            {
+                break;
+            }
+            default:
+            {
+                _result++;
+                host.getChild(0)->accept(*this);
+                break;
+            }
         }
     }
 
@@ -56,8 +56,7 @@ public:
     // Post: The height of the tree is returned.
 
     int result() const {
-        cerr << "NWBTreeHeightVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -65,8 +64,9 @@ public:
 
 template<class T>
 int height(NTree<T> const &tree) {
-    cerr << "height: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeHeightVis<T> heightVis;
+    tree.accept(heightVis);
+    return heightVis.result();
 }
 
 #endif

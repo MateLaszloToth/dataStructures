@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeContainsVis.hpp
+//File: NWBTree/NWBTreeContainsVis.hpp
 
 #ifndef NWBTREECONTAINSVIS_HPP_
 #define NWBTREECONTAINSVIS_HPP_
@@ -25,18 +25,20 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeContainsVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = -1;
+        } break;
         default:
         {
             int k = 0;
             while (k < size && host.getData(k) < _val) {
-                k++;
+                k++; // loops until the array == _val or k is greater than size
             }
-            cerr << "NWBTreeContainsVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (k >= size || host.getData(k) != _val) {
+                host.getChild(k)->accept(*this);
+            } else if (host.getData(k) == _val) {
+                _result = k;
+            }
+        } break;
         }
     }
 
@@ -45,18 +47,20 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeContainsVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = -1;
+        } break;
         default:
         {
             int k = 0;
             while (k < size && host.getData(k) < _val) {
-                k++;
+                k++; // loops until the array == _val or k is greater than size
             }
-            cerr << "NWBTreeContainsVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (k >= size || host.getData(k) != _val) {
+                host.getChild(k)->accept(*this);
+            } else if (host.getData(k) == _val) {
+                _result = k;
+            }
+        } break;
         }
     }
 
@@ -66,8 +70,7 @@ public:
     // otherwise, -1 is returned.
 
     int result() const {
-        cerr << "BiTCSVcontainsVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -75,8 +78,9 @@ public:
 
 template<class T>
 int contains(T key, NTree<T> const &tree) {
-    cerr << "contains: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeContainsVis<T> containsVis(key);
+    tree.accept(containsVis);
+    return containsVis.result();
 }
 
 #endif

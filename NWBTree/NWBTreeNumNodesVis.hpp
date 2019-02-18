@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeNumNodesVis.hpp
+//File: NWBTree/NWBTreeNumNodesVis.hpp
 
 #ifndef NWBTREENUMNODESVIS_HPP_
 #define NWBTREENUMNODESVIS_HPP_
@@ -24,14 +24,15 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeNumNodesVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            
+        } break;
         default:
         {
-            cerr << "NWBTreeNumNodesVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            for (int i = 0; i <= size; i++) {
+                host.getChild(i)->accept(*this);
+            }
+            _result += 1;
+        } break;
         }
     }
 
@@ -41,14 +42,15 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeNumNodesVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            
+        } break;
         default:
         {
-            cerr << "NWBTreeNumNodesVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            for (int i = 0; i <= size; i++) {
+                host.getChild(i)->accept(*this);
+            }
+            _result += 1;
+        } break;
         }
     }
 
@@ -57,8 +59,7 @@ public:
     // Post: The height of the tree is returned.
 
     int result() const {
-        cerr << "NWBTreeNumNodesVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -66,8 +67,9 @@ public:
 
 template<class T>
 int numNodes(NTree<T> const &tree) {
-    cerr << "numNodes: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeNumNodesVis<T> numNodeVis;
+    tree.accept(numNodeVis);
+    return numNodeVis.result();
 }
 
 #endif

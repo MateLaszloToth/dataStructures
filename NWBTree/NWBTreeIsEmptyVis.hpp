@@ -23,14 +23,12 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeIsEmptyVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = true;
+        } break;
         default:
         {
-            cerr << "NWBTreeIsEmptyVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = false;
+        } break;
         }
     }
 
@@ -39,14 +37,12 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeIsEmptyVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = true;
+        } break;
         default:
         {
-            cerr << "NWBTreeIsEmptyVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            _result = false;
+        } break;
         }
     }
 
@@ -56,8 +52,7 @@ public:
     // otherwise, false is returned.
 
     bool result() const {
-        cerr << "NWBTreeIsEmptyVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -65,8 +60,10 @@ public:
 
 template<class T>
 bool isEmpty(NTree<T> const &tree) {
-    cerr << "isEmpty: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeIsEmptyVis<T> IsEmptyVis;
+    tree.accept(IsEmptyVis);
+    return IsEmptyVis.result();
 }
 
 #endif
+

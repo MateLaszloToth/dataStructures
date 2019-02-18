@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeNumValuesVis.hpp
+//File: NWBTree/NWBTreeNumValuesVis.hpp
 
 #ifndef NWBTREENUMVALUESVIS_HPP_
 #define NWBTREENUMVALUESVIS_HPP_
@@ -24,13 +24,15 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeNumValuesVis: Exercise for the student." << endl;
-            throw -1;
+           break;
         }
         default:
         {
-            cerr << "NWBTreeNumValuesVis: Exercise for the student." << endl;
-            throw -1;
+            _result += size;
+            for (int i = 0; i <= size; i++) {
+                host.getChild(i)->accept(*this);
+            }
+            break;
         }
         }
     }
@@ -39,16 +41,18 @@ public:
 
     void caseAt(int size, NTree<T> const &host) override {
         switch (size) {
-        case 0:
-        {
-            cerr << "NWBTreeNumValuesVis: Exercise for the student." << endl;
-            throw -1;
-        }
-        default:
-        {
-            cerr << "NWBTreeNumValuesVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            case 0:
+            {
+                break;
+            }
+            default:
+            {
+                _result += size;
+                for (int i = 0; i <= size; i++) {
+                    host.getChild(i)->accept(*this);
+                }
+                break;
+            }
         }
     }
 
@@ -57,8 +61,7 @@ public:
     // Post: The number of data values in the tree is returned.
 
     int result() const {
-        cerr << "NWBTreeNumValuesVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -66,8 +69,9 @@ public:
 
 template<class T>
 int numValues(NTree<T> const &tree) {
-    cerr << "concat: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeNumValuesVis<T> numValuesVis;
+    tree.accept(numValuesVis);
+    return numValuesVis.result();
 }
 
 #endif

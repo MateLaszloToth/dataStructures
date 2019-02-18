@@ -1,4 +1,4 @@
-// File: NWBTree/NWBTreeMaxVis.hpp
+//File: NWBTree/NWBTreeMaxVis.hpp
 
 #ifndef NWBTREEMAXVIS_HPP_
 #define NWBTREEMAXVIS_HPP_
@@ -24,14 +24,16 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            isEmpty(host);
+        } break;
         default:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (!isEmpty(*host.getChild(size))) {
+                host.getChild(size)->accept(*this);
+            } else {
+                _result = host.getData(size-1);
+            }
+        } break;
         }
     }
 
@@ -41,14 +43,16 @@ public:
         switch (size) {
         case 0:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            isEmpty(host);
+        } break;
         default:
         {
-            cerr << "NWBTreeMinVis: Exercise for the student." << endl;
-            throw -1;
-        }
+            if (!isEmpty(*host.getChild(size))) {
+                host.getChild(size)->accept(*this);
+            } else {
+                _result = host.getData(size-1);
+            }
+        } break;
         }
     }
 
@@ -58,8 +62,7 @@ public:
     // Post: The maximum value of the tree is returned.
 
     T result() const {
-        cerr << "NWBTreeMaxVis: Exercise for the student." << endl;
-        throw -1;
+        return _result;
     }
 };
 
@@ -67,8 +70,9 @@ public:
 
 template<class T>
 T max(NTree<T> const &tree) {
-    cerr << "max: Exercise for the student." << endl;
-    throw -1;
+    NWBTreeMaxVis<T> maxVis;
+    tree.accept(maxVis);
+    return maxVis.result();
 }
 
 #endif
