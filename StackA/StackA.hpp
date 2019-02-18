@@ -1,4 +1,7 @@
 // File: StackA/StackA.hpp
+// Name: Mate Toth
+// Date: Oct/19
+// A: 13
 
 #ifndef STACKA_HPP_
 #define STACKA_HPP_
@@ -49,15 +52,13 @@ StackA<T>::StackA(int cap):
 // ========= isEmpty =========
 template<class T>
 bool StackA<T>::isEmpty() const {
-    cerr << "isEmpty: Exercise for the student." << endl;
-    throw -1;
+    return _top == -1;
 }
 
 // ========= isFull =========
 template<class T>
 bool StackA<T>::isFull() const {
-    cerr << "isFull: Exercise for the student." << endl;
-    throw -1;
+    return _top == _data.cap()-1;
 }
 
 // ========= pop =========
@@ -67,15 +68,15 @@ T StackA<T>::pop() {
         cerr << "pop precondition violated: Cannot pop from an empty stack." << endl;
         throw -1;
     }
-    cerr << "pop: Exercise for the student." << endl;
-    throw -1;
+    T temp = _data[_top];
+    _top--;
+    return temp;
 }
 
 // ========= push =========
 template<class T>
 void StackA<T>::push(T const &val) {
-    cerr << "push: Exercise for the student." << endl;
-    throw -1;
+    _data[++_top] = val;
 }
 
 // ========= topOf =========
@@ -85,8 +86,8 @@ T const &StackA<T>::topOf() const {
         cerr << "topOf precondition violated: An empty stack has no top." << endl;
         throw -1;
     }
-    cerr << "topOf: Exercise for the student." << endl;
-    throw -1;
+    return _data[_top];
+
 }
 
 // ========= operator<< =========
