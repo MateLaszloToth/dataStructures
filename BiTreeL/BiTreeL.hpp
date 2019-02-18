@@ -9,6 +9,7 @@ using namespace std;
 template<class T> class LNode; // Forward declaration.
 
 // ========= BiTreeL =========
+
 template<class T>
 class BiTreeL {
     friend class LNode<T>;
@@ -117,6 +118,7 @@ public:
 };
 
 // ========= LNode =========
+
 template<class T>
 class LNode {
     friend class BiTreeL<T>;
@@ -151,49 +153,74 @@ private:
 };
 
 // ========= Constructors =========
+
 template<class T>
 BiTreeL<T>::BiTreeL() :
-    _root(nullptr) {
+_root(nullptr) {
 }
 
 template<class T>
 LNode<T>::LNode(T data) :
-    _left(nullptr), _data(data), _right(nullptr) {
+_left(nullptr), _data(data), _right(nullptr) {
 }
 
 // ========= Destructors =========
+
 template<class T>
 BiTreeL<T>::~BiTreeL() {
     clear();
 }
 
 // ========= clear =========
+
 template<class T>
 void BiTreeL<T>::clear() {
-    cerr << "BiTreeL<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    if (isEmpty()) {
+        _root = nullptr;
+    } else {
+        _root->clear();
+        _root = nullptr;
+    }
 }
 
 template<class T>
 void LNode<T>::clear() {
-    cerr << "LNode<T>::clear: Exercise for the student." << endl;
-    throw -1;
+    if (_left != nullptr) {
+        _left->clear();
+        _left = nullptr;
+    }
+    if (_right != nullptr) {
+        _right->clear();
+        _right = nullptr;
+    }
 }
 
 // ========= contains =========
+
 template<class T>
 bool BiTreeL<T>::contains(T const &data) const {
-    cerr << "BiTreeL<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    return isEmpty() ? false : _root->contains(data);
 }
 
 template<class T>
 bool LNode<T>::contains(T const &data) const {
-    cerr << "LNode<T>::contains: Exercise for the student." << endl;
-    throw -1;
+    if (_data == data) {
+        return true;
+    }
+    if (_right == nullptr && _left == nullptr) {
+        return false;
+    }
+    if (_right == nullptr) {
+        return _left->contains(data);
+    }
+    if (_left == nullptr) {
+        return _right->contains(data);
+    }
+    return _left->contains(data) ? true : _right->contains(data);
 }
 
 // ========= copyRoot =========
+
 template<class T>
 LNode<T> *BiTreeL<T>::copyRoot(BiTreeL<T> const &rhs) {
     return rhs.isEmpty() ? nullptr : rhs._root->copyRoot();
@@ -212,45 +239,72 @@ LNode<T> *LNode<T>::copyRoot() {
 }
 
 // ========= equals =========
+
 template<class T>
 bool BiTreeL<T>::equals(BiTreeL<T> const &rhs) const {
-    cerr << "BiTreeL<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    return _root == nullptr ?
+    rhs.isEmpty() : !rhs.isEmpty() && _root->equals(rhs._root);
 }
 
 template<class T>
 bool LNode<T>::equals(LNode<T> const *rhs) const {
-    cerr << "LNode<T>::equals: Exercise for the student." << endl;
-    throw -1;
+    if(_data != rhs->_data) {
+        return false;
+    }
+    return
+        (_left != nullptr && rhs->_left != nullptr ?
+        _left->equals(rhs->_left) :
+        _left == nullptr && rhs->_left == nullptr)
+    &&
+    (_right != nullptr && rhs->_right != nullptr ?
+     _right->equals(rhs->_right) :
+     _right == nullptr && rhs->_right == nullptr);
+    
 }
 
 // ========= height =========
+
 template<class T>
 int BiTreeL<T>::height() const {
-    cerr << "BiTreeL<T>::height: Exercise for the student." << endl;
-    throw -1;
+    return isEmpty() ? 0 : _root->height();
 }
 
 template<class T>
 int LNode<T>::height() const {
-    cerr << "LNode<T>::height: Exercise for the student." << endl;
-    throw -1;
+    if (_left == nullptr && _right == nullptr) {
+        return 1;
+    }
+    if (_left == nullptr) {
+        return 1 + _right->height();
+    }
+    if (_right == nullptr) {
+        return 1 + _left->height();
+    }
+    return _left->height() >= _right->height() ? 1 + _left->height() : 1 + _right->height();
 }
 
 // ========= inOrder =========
+
 template<class T>
 void BiTreeL<T>::inOrder(ostream &os) const {
-    cerr << "BiTreeL<T>::inOrder: Exercise for the student." << endl;
-    throw -1;
+    if (_root != nullptr) {
+        _root->inOrder(os);
+    }
 }
 
 template<class T>
 void LNode<T>::inOrder(ostream &os) const {
-    cerr << "LNode<T>::inOrder: Exercise for the student." << endl;
-    throw -1;
+    if (_left != nullptr) {
+        _left->inOrder(os);
+    }
+    os << _data << "  ";
+    if (_right != nullptr) {
+        _right->inOrder(os);
+    }
 }
 
 // ========= insertRoot =========
+
 template<class T>
 void BiTreeL<T>::insertRoot(T const &data) {
     if (_root != nullptr) {
@@ -261,12 +315,14 @@ void BiTreeL<T>::insertRoot(T const &data) {
 }
 
 // ========= isEmpty =========
+
 template<class T>
 bool BiTreeL<T>::isEmpty() const {
     return _root == nullptr;
 }
 
 // ========= leftIsEmpty =========
+
 template<class T>
 bool BiTreeL<T>::leftIsEmpty() const {
     if (_root == nullptr) {
@@ -277,6 +333,7 @@ bool BiTreeL<T>::leftIsEmpty() const {
 }
 
 // ========= max =========
+
 template<class T>
 T const &BiTreeL<T>::max() const {
     if (_root == nullptr) {
@@ -292,24 +349,34 @@ T const &LNode<T>::max() const {
     T const *leftMax = (_left == nullptr) ? dataTemp : &_left->max();
     T const *rightMax = (_right == nullptr) ? dataTemp : &_right->max();
     return (*leftMax > *rightMax)
-        ? ((*leftMax > *dataTemp) ? *leftMax : *dataTemp)
-        : ((*rightMax > *dataTemp) ? *rightMax : *dataTemp);
+            ? ((*leftMax > *dataTemp) ? *leftMax : *dataTemp)
+            : ((*rightMax > *dataTemp) ? *rightMax : *dataTemp);
 }
 
 // ========= numLeaves =========
+
 template<class T>
 int BiTreeL<T>::numLeaves() const {
-    cerr << "BiTreeL<T>::numLeaves: Exercise for the student." << endl;
-    throw -1;
+    return _root == nullptr ? 0 : _root->numLeaves();
 }
 
 template<class T>
 int LNode<T>::numLeaves() const {
-    cerr << "LNode<T>::numLeaves: Exercise for the student." << endl;
-    throw -1;
+    int total = 0;
+    if (_left != nullptr) {
+        total += _left->numLeaves();
+    }
+    if (_right != nullptr) {
+        total += _right->numLeaves();
+    }
+    if (_left == nullptr && _right == nullptr) {
+        total++;
+    }
+    return total;
 }
 
 // ========= numNodes =========
+
 template<class T>
 int BiTreeL<T>::numNodes() const {
     return _root == nullptr ? 0 : _root->numNodes();
@@ -328,6 +395,7 @@ int LNode<T>::numNodes() const {
 }
 
 // ========= operator= =========
+
 template<class T>
 BiTreeL<T> &BiTreeL<T>::operator=(BiTreeL<T> const &rhs) {
     if (this != &rhs) { // In case someone writes myTree = myTree;
@@ -338,12 +406,14 @@ BiTreeL<T> &BiTreeL<T>::operator=(BiTreeL<T> const &rhs) {
 }
 
 // ========= operator== =========
+
 template<class T>
 bool operator==(BiTreeL<T> const &lhs, BiTreeL<T> const &rhs) {
     return lhs.equals(rhs);
 }
 
 // ========= operator<< =========
+
 template<class T>
 ostream & operator<<(ostream &os, BiTreeL<T> const &rhs) {
     rhs.toStream(os);
@@ -351,18 +421,26 @@ ostream & operator<<(ostream &os, BiTreeL<T> const &rhs) {
 }
 
 // ========= postOrder =========
+
 template<class T>
 void BiTreeL<T>::postOrder(ostream &os) const {
-    cerr << "BiTreeL<T>::postOrder: Exercise for the student." << endl;
-    throw -1;
+    if (_root != nullptr) {
+        _root->postOrder(os);
+    }
 }
 
 template<class T>
 void LNode<T>::postOrder(ostream &os) const {
-    cerr << "LNode<T>::postOrder: Exercise for the student." << endl;
-    throw -1;
+    if (_left != nullptr) {
+        _left->postOrder(os);
+    }
+    if (_right != nullptr) {
+        _right->postOrder(os);
+    }
+    os << _data << "  ";
 }
 // ========= preOrder =========
+
 template<class T>
 void BiTreeL<T>::preOrder(ostream &os) const {
     if (_root != nullptr) {
@@ -382,30 +460,67 @@ void LNode<T>::preOrder(ostream &os) const {
 }
 
 // ========= remLeaves =========
+
 template<class T>
 void BiTreeL<T>::remLeaves() {
-    cerr << "BiTreeL<T>::remLeaves: Exercise for the student." << endl;
-    throw -1;
+    if(_root != nullptr){
+        if (_root->_left == nullptr && _root->_right == nullptr) {
+            delete _root;
+            _root = nullptr;
+        }else{
+            _root->remLeaves();
+        }
+    }
 }
 
 template<class T>
 void LNode<T>::remLeaves() {
-    cerr << "LNode<T>::remLeaves: Exercise for the student." << endl;
-    throw -1;
+    if (_left != nullptr) {
+        if(_left->_left == nullptr && _left->_right == nullptr){
+            delete _left;
+            _left = nullptr;
+        }else{
+            _left->remLeaves();
+        }
+    }
+    if (_right != nullptr) {
+        if(_right->_left == nullptr && _right->_right == nullptr){
+            delete _right;
+            _right = nullptr;
+        }else{
+            _right->remLeaves();
+        }
+    }
 }
 
 // ========= remRoot =========
+
 template<class T>
 T BiTreeL<T>::remRoot() {
     if (_root == nullptr) {
         cerr << "remRoot precondition violated: Cannot remove root from an empty tree." << endl;
         throw -1;
     }
-    cerr << "BiTreeL<T>::remRoot: Exercise for the student." << endl;
-    throw -1;
+    T rootVal = _root->_data;
+    if (_root->_left != nullptr && _root->_right != nullptr) {
+        cerr << "remRoot precondition violated: Root of tree must have one empty child" << endl;
+        throw -1;
+    } else {
+        LNode<T> *temp = _root;
+        if (_root->_left == nullptr) {
+            _root = _root->_right;
+            temp->_right = nullptr;
+        } else {
+            _root = _root->_left;
+            temp->_left = nullptr;
+        }
+        delete temp;
+    }
+    return rootVal;
 }
 
 // ========= rightIsEmpty =========
+
 template<class T>
 bool BiTreeL<T>::rightIsEmpty() const {
     if (_root == nullptr) {
@@ -416,6 +531,7 @@ bool BiTreeL<T>::rightIsEmpty() const {
 }
 
 // ========= root =========
+
 template<class T>
 T const &BiTreeL<T>::root() const {
     if (_root == nullptr) {
@@ -431,6 +547,7 @@ T const &LNode<T>::root() const {
 }
 
 // ========= setLeft =========
+
 template<class T>
 void BiTreeL<T>::setLeft(BiTreeL<T> &subTree) {
     if (_root == nullptr) {
@@ -450,6 +567,7 @@ void LNode<T>::setLeft(BiTreeL<T> &subTree) {
 }
 
 // ========= setRight =========
+
 template<class T>
 void BiTreeL<T>::setRight(BiTreeL<T> &subTree) {
     if (_root == nullptr) {
@@ -469,25 +587,28 @@ void LNode<T>::setRight(BiTreeL<T> &subTree) {
 }
 
 // ========= setRoot =========
+
 template<class T>
 void BiTreeL<T>::setRoot(T const &data) {
-    cerr << "BiTreeL<T>::setRoot: Exercise for the student." << endl;
-    throw -1;
+    if (_root == nullptr) {
+        cerr << "setRoot precondition violated: Cannot set root on an empty tree." << endl;
+        throw -1;
+    }
+    _root->setRoot(data);
 }
 
 template<class T>
 void LNode<T>::setRoot(T const &data) {
-    cerr << "LNode<T>::setRoot: Exercise for the student." << endl;
-    throw -1;
+    _data = data;
 }
 
 // ========= toStream =========
+
 template<class T>
 void BiTreeL<T>::toStream(ostream &os) const {
     if (_root == nullptr) {
         os << "*";
-    }
-    else {
+    } else {
         _root->toStream("", "", "", os);
     }
 }
@@ -496,8 +617,7 @@ template<class T>
 void LNode<T>::toStream(string prRight, string prRoot, string prLeft, ostream &os) const {
     if (_right == nullptr) {
         os << prRight << "     -*" << endl;
-    }
-    else {
+    } else {
         _right->toStream(prRight + "     ", prRight + "     ", prRight + "    |", os);
     }
     os << prRoot;
@@ -507,8 +627,7 @@ void LNode<T>::toStream(string prRight, string prRoot, string prLeft, ostream &o
     os << _data << "|" << endl;
     if (_left == nullptr) {
         os << prLeft << "     -*" << endl;
-    }
-    else {
+    } else {
         _left->toStream(prLeft + "    |", prLeft + "     ", prLeft + "     ", os);
     }
 }
