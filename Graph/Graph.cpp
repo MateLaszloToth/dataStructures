@@ -7,8 +7,8 @@ using namespace std;
 
 // ========= Constructor =========
 Graph::Graph(bool isDigraph, int numVert) :
-    _numVertices(numVert),
     _isDigraph(isDigraph),
+    _numVertices(numVert),
     _vertex(numVert),
     _graph(numVert),
     _graphIter(numVert) {
@@ -33,8 +33,27 @@ void Graph::breadthFirstSearch(int s, ostream &os) {
 }
 
 void Graph::bfs(int s, ostream &os) {
-    cerr << "Graph::bfs: Exercise for the student." << endl;
-    throw -1;
+    _vertex[s].color = GRAY;
+    _vertex[s].distance = 0;
+    QueueL<int> queue{};
+    _vertex[s].discovered = ++_time;
+    queue.enqueue(s);
+    while(!queue.isEmpty()){
+        int u = queue.dequeue();
+        os << u << "  ";
+        _vertex[u].finished = ++_time;
+        for(_graphIter[u].first(); !_graphIter[u].isDone(); _graphIter[u].next()){
+            int v = _graphIter[u].currentItem();
+            if(_vertex[v].color == WHITE){
+                _vertex[v].color = GRAY;
+                _vertex[v].distance = _vertex[u].distance+1;
+                _vertex[v].predecessor = u;
+                _vertex[v].discovered = ++_time;
+                queue.enqueue(v);
+            }
+        }
+        _vertex[u].color = BLACK;
+    }
 }
 
 // ========= Depth first search =========
@@ -46,8 +65,18 @@ void Graph::depthFirstSearch(int s, ostream &os) {
 }
 
 void Graph::dfs(int u, ostream &os) {
-    cerr << "Graph::dfsVisit: Exercise for the student." << endl;
-    throw -1;
+    os << u << "  ";
+    _vertex[u].discovered = ++_time; 
+    _vertex[u].color = GRAY;
+    for(_graphIter[u].first(); !_graphIter[u].isDone(); _graphIter[u].next()){
+        int v = _graphIter[u].currentItem();
+        if(_vertex[v].color == WHITE){
+            _vertex[v].predecessor = u;
+            dfs(v, os);
+        }
+    }
+    _vertex[u].color = BLACK;
+    _vertex[u].finished = ++_time;
 }
 
 // ========= initGraph =========
@@ -79,14 +108,33 @@ void Graph::insertEdge(int from, int to) {
 
 // ========= numEdges =========
 int Graph::numEdges() {
-    cerr << "Graph::numEdges: Exercise for the student." << endl;
-    throw -1;
+    int numEdges = 0;
+    if(!_isDigraph){
+        for(int u = 0; u < _numVertices; u++){
+            numEdges += _graph[u].length();
+        }
+        return numEdges /= 2;
+    }else{
+        for(int u = 0; u < _numVertices; u++){
+            numEdges += _graph[u].length();
+        }
+        return numEdges;
+    }
 }
 
 // ========= removeEdge =========
 void Graph::removeEdge(int from, int to) {
-    cerr << "Graph::removeEdge: Exercise for the student." << endl;
-    throw -1;
+    if ((from < 0) || (_numVertices <= from) || (to < 0) || (_numVertices <= to)) {
+        cerr << "removeEdge precondition violated: from or to out of range." << endl;
+        cerr << "from == " << from << "  to == " << to << endl;
+        throw -1;
+    }
+    if (_graph[from].contains(to)) {
+        _graph[from].remove(to);
+    }
+    if (!_isDigraph && _graph[to].contains(from)) {
+        _graph[to].remove(from);
+    }
 }
 
 // ========= writeAdjacencyLists =========
@@ -100,8 +148,17 @@ void Graph::writeAdjacencyLists(ostream &os) {
 
 // ========= writeComponents =========
 void Graph::writeComponents(ostream &os) {
-    cerr << "Graph::connectedComponents: Exercise for the student." << endl;
-    throw -1;
+    int numComponents = 0;
+    initGraph();
+    for(int u = 0; u < _numVertices; u++){
+        if(_vertex[u].color == WHITE){
+            os << "Connected Component: ";
+            bfs(u, os);
+            os << endl;
+            numComponents++;
+        }
+    }
+    os << "There are " << numComponents << " connected components." << endl;
 }
 
 // ========= writePath =========
@@ -122,8 +179,14 @@ void Graph::writePath(int from, int to, ostream &os) {
 }
 
 void Graph::writePathHelper(int from, int to, ostream &os) {
-    cerr << "writePathHelper: Exercise for the student." << endl;
-    throw -1;
+    if(to == from){
+        os << from << endl;
+    } else if(_vertex[to].predecessor == -1){
+        os << "No path exists." << endl;
+    } else{
+        writePathHelper(from, _vertex[to].predecessor, os);
+        os << to << endl;
+    }
 }
 
 // ========= write vertices =========
