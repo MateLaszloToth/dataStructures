@@ -11,7 +11,7 @@ using namespace std;
 template<class T>
 class QueueL {
 private:
-    // Attribute is exercise for the student.
+    ListL<T> *_listL;
 
 public:
     QueueL();
@@ -41,57 +41,60 @@ public:
 // ========= Constructor =========
 template<class T>
 QueueL<T>::QueueL() {
-    cerr << "QueueL<T>::QueueL: Exercise for the student." << endl;
-    throw -1;
+    _listL = new ListL<T>();
 }
 
 // ========= Destructor =========
 template<class T>
 QueueL<T>::~QueueL() {
-    cerr << "QueueL<T>::~QueueL: Exercise for the student." << endl;
-    throw -1;
+    delete _listL;
 }
 
 // ========= dequeue =========
 template<class T>
 T QueueL<T>::dequeue() {
-    cerr << "QueueL<T>::dequeue: Exercise for the student." << endl;
-    throw -1;
+    if(isEmpty()){
+        cerr << "QueueL<T>::dequeue: The queue is empty." << endl;
+        throw -1;
+    }else{
+        return _listL->remFirst();
+    }
 }
 
 // ========= enqueue =========
 template<class T>
 void QueueL<T>::enqueue(T const &val) {
-    cerr << "QueueL<T>::enqueue: Exercise for the student." << endl;
-    throw -1;
+    _listL->append(val);
 }
 
 // ========= headOf =========
 template<class T>
 T const &QueueL<T>::headOf() const {
-    cerr << "QueueL<T>::headOf: Exercise for the student." << endl;
-    throw -1;
+    if(isEmpty()){
+        cerr << "QueueL<T>::dequeue: The queue is empty." << endl;
+        throw -1;
+    }else{
+        return _listL->first();
+    }
 }
 
 // ========= isEmpty =========
 template<class T>
 bool QueueL<T>::isEmpty() const {
-    cerr << "QueueL<T>::isEmpty: Exercise for the student." << endl;
-    throw -1;
+    return _listL->isEmpty();
 }
 
 // ========= operator<< =========
 template<class T>
 ostream &operator<<(ostream &os, QueueL<T> const &rhs) {
-    cerr << "operator<<: Exercise for the student." << endl;
-    throw -1;
+    rhs.toStream(os);
+    return os;
 }
 
 // ========= toStream =========
 template<class T>
 void QueueL<T>::toStream(ostream &os) const {
-    cerr << "QueueL<T>::toStream: Exercise for the student." << endl;
-    throw -1;
+    _listL->toStream(os);
 }
 
 #endif
